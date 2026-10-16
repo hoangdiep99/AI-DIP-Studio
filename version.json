@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.1",
+  "latestVersion": "2.1.2",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.1.1 - Nâng Cấp Khóa Nét Mặt Sinh Trắc Học",
-  "changelog": "• KHÓA NÉT MẶT SINH TRẮC HỌC: Nâng cấp thuật toán Prompt bảo toàn 100% ngũ quan (mắt 1/2 mí, sống mũi, dáng cằm/hàm, nốt ruồi đặc trưng), tuyệt đối không bị lệch mặt hay vẽ sang người khác.\n• KHUNG CANH THƯỚC STUDIO: Canh chỉnh tỉ lệ chuẩn quốc tế với các đường gióng Đỉnh đầu, Trục mắt, Cằm và Trục giữa đối xứng.\n• XỬ LÝ ẢNH HÀNG LOẠT (BATCH MODE): Kéo thả nhiều ảnh cùng lúc, tạo ảnh đồng bộ theo hàng đợi.\n• BỘ CÀI ĐẶT 1-CLICK TỐI GIẢN: Cài đặt cực nhanh, tự tạo shortcut Desktop và tự động mở app ngay sau khi cài.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.1/AI-DIP-Studio-Setup-2.1.1.exe",
+  "title": "AI DIP Studio v2.1.2 - Tối Ưu Kết Nối Google Gemini API",
+  "changelog": "• TỐI ƯU KẾT NỐI GOOGLE GEMINI API: Chuẩn hóa endpoint xác thực qua danh mục Model quốc tế (/v1beta/models), nhận diện chính xác 100% mọi API Key Google AI Studio.\n• NÂNG CẤP NHẬN DIỆN THỊ GIÁC AI: Cập nhật mô hình Vision sang Gemini 2.5 Flash phân tích khuôn mặt, giới tính và độ tuổi cực nhanh và chuẩn xác.\n• THÔNG BÁO LỖI MINH BẠCH: Bổ sung hướng dẫn chi tiết bằng tiếng Việt khi tài khoản Google đang ở Free tier (chưa mở billing tạo ảnh).\n• KHÓA NÉT MẶT SINH TRẮC HỌC: Giữ trọn 100% ngũ quan, nốt ruồi và sống mũi chuẩn studio.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.2/AI-DIP-Studio-Setup-2.1.2.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
