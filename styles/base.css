@@ -228,9 +228,9 @@ button{min-height:44px;}
 .range-slider{width:100%;height:6px;border-radius:3px;background:var(--border);outline:none;}
 .slider-row{display:flex;align-items:center;gap:12px;}
 .workspace{min-height:500px;display:flex;flex-direction:column;}
-.ws-toolbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);}
+.ws-toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);}
 .ws-toolbar h3{font-size:14px;font-weight:800;}
-.ws-content{flex:1;padding:20px;display:flex;align-items:center;justify-content:center;position:relative;}
+.ws-content{flex:1;padding:10px 16px;display:flex;align-items:center;justify-content:center;position:relative;overflow-y:auto;}
 .ws-empty{text-align:center;color:var(--text-faint);padding:60px 20px;}
 .ws-empty-icon{font-size:56px;margin-bottom:16px;opacity:.4;}
 .loading-overlay{position:absolute;inset:0;background:rgba(10,10,15,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:50;border-radius:var(--radius-lg);}
@@ -243,8 +243,14 @@ button{min-height:44px;}
 .result-error-title{font-weight:700;}
 .result-error-detail{white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,0.25);padding:10px;border-radius:10px;margin:4px 0 0;color:var(--danger);font-size:12px;font-weight:400;max-height:220px;overflow:auto;width:100%;}
 
-.result-display{width:100%;display:flex;flex-direction:column;align-items:center;gap:16px;}
-.result-image-wrapper{position:relative;width:100%;max-width:500px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
+.result-display{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:2px 0;}
+.result-display .compare-container{
+  max-width: min(300px, 39vh);
+  margin: 0 auto;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+  border-radius: var(--radius);
+}
+.result-image-wrapper{position:relative;width:100%;max-width:min(300px, 39vh);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);margin:0 auto;box-shadow: 0 10px 28px rgba(0,0,0,0.45);}
 .result-log-card{margin-top:18px;padding:16px;border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,0.03);}
 .result-log-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
 .result-log-table{width:100%;border-collapse:collapse;font-size:13px;}
@@ -399,16 +405,16 @@ button{min-height:44px;}
 .model-recommendation.warning{border-color:rgba(245,158,11,.45);background:var(--gold-soft);}
 .model-recommendation.warning .model-rec-title{color:var(--gold);}
 .model-recommendation.neutral .model-rec-title{color:var(--text);}
-.generation-meta{width:min(100%,620px);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--border);border-radius:14px;background:var(--bg-elevated);color:var(--text-dim);font-size:12px;}
+.generation-meta{width:auto;max-width:min(100%,560px);display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:6px 16px;border:1px solid var(--border);border-radius:999px;background:var(--bg-elevated);color:var(--text-dim);font-size:12px;}
 .generation-meta strong{color:var(--text);}
 .result-actions{
-  display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
-  width:min(100%,620px);margin-top:-4px;
+  display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  width:min(100%,560px);margin-top:0;
 }
 .btn-download-strong,.btn-layout-strong{
-  min-height:48px;border:0;border-radius:14px;padding:12px 18px;
-  font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  transition:all var(--transition);box-shadow:0 12px 26px rgba(0,0,0,.22);
+  min-height:42px;border:0;border-radius:12px;padding:10px 18px;
+  font-weight:900;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:all var(--transition);box-shadow:0 8px 20px rgba(0,0,0,.22);
 }
 .btn-download-strong{
   background:linear-gradient(135deg,var(--gold),#f97316);color:#1b1200;

@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.8",
+  "latestVersion": "2.0.9",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.8 - Sửa Lỗi ComparisonSlider, Khắc Phục Mở App & Tối Ưu Cập Nhật",
-  "changelog": "• SỬA LỖI COMPARISONSLIDER: Bổ sung import linh kiện ComparisonSlider trong bộ tạo ảnh thẻ, khắc phục triệt để lỗi ReferenceError khi ảnh vừa tạo xong.\n• KHẮC PHỤC LỖI MỞ APP PHẢI CHỈNH KÍCH THƯỚC: Bật lại cơ chế dựng hình chuẩn và kích hoạt ready-to-show, mở app hiển thị ngay lập tức không cần co kéo cửa sổ.\n• TỐI ƯU HỆ THỐNG KIỂM TRA CẬP NHẬT: Ưu tiên GitHub Releases API thời gian thực không bị trễ bộ nhớ đệm, nhận diện bản mới ngay khi phát hành.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.8/AI-DIP-Studio-Setup-2.0.8.exe",
+  "title": "AI DIP Studio v2.0.9 - Tối Ưu Bố Cục Kết Quả Vừa Vặn Khung Hình (Không Cần Cuộn)",
+  "changelog": "• BẢNG KẾT QUẢ VỪA VẶN HOÀN TOÀN: Tinh chỉnh kích thước ảnh so sánh và thanh điều khiển gọn gàng, hiển thị trọn vẹn 100% (Ảnh so sánh, Thông số tạo ảnh, Nút Tải PNG/JPG và Sắp xếp in ấn) ngay trên một màn hình mà không cần lăn chuột.\n• THANH THÔNG SỐ & NÚT BẤM HIỆN ĐẠI: Thiết kế thanh meta dạng pill bo tròn tinh tế, các nút bấm thao tác trực quan nằm ngay dưới ảnh thẻ.\n• BẢN BUILD MỚI NHẤT: Kèm toàn bộ các sửa lỗi so sánh ảnh và khởi động tức thì.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.9/AI-DIP-Studio-Setup-2.0.9.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
