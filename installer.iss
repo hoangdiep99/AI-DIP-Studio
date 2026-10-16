@@ -2,7 +2,7 @@
 ; Tinh gọn tối giản 1-Click - Cài đặt xong tự động mở app ngay lập tức (giống Chép Thẻ Nhanh Pro)
 
 #define MyAppName "AI DIP Studio"
-#define MyAppVersion "2.1.4"
+#define MyAppVersion "2.1.5"
 #define MyAppPublisher "Diep Foto"
 #define MyAppExeName "AI DIP Studio.exe"
 #define SourceDir "release\win-unpacked"

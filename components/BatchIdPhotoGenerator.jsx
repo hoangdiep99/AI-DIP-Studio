@@ -21,6 +21,17 @@ const BatchIdPhotoGenerator = ({ models = [], onSendToLayout }) => {
   const [dragging, setDragging] = useState(false);
   const [batchError, setBatchError] = useState('');
 
+  const handleGenderModeChange = (mode) => {
+    setGenderMode(mode);
+    if (mode === 'female' && selectedOutfit?.category === 'male') {
+      const defaultFemale = config.outfits.find((o) => o.category === 'female') || config.outfits[0];
+      setSelectedOutfit(defaultFemale);
+    } else if (mode === 'male' && selectedOutfit?.category === 'female') {
+      const defaultMale = config.outfits.find((o) => o.category === 'male') || config.outfits[0];
+      setSelectedOutfit(defaultMale);
+    }
+  };
+
   const stopRequestedRef = useRef(false);
   const inputRef = useRef(null);
 
@@ -232,20 +243,24 @@ const BatchIdPhotoGenerator = ({ models = [], onSendToLayout }) => {
               disabled={isRunning}
               style={{ width: '100%', padding: '8px 10px', borderRadius: 8, background: 'var(--bg-elevated)', color: 'var(--text)', border: '1px solid var(--border)' }}
             >
-              <optgroup label="👨 TRANG PHỤC NAM">
-                {config.outfits.filter((o) => o.category === 'male').map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.emoji} {o.label} ({o.desc})
-                  </option>
-                ))}
-              </optgroup>
-              <optgroup label="👩 TRANG PHỤC NỮ">
-                {config.outfits.filter((o) => o.category === 'female').map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.emoji} {o.label} ({o.desc})
-                  </option>
-                ))}
-              </optgroup>
+              {genderMode !== 'female' && (
+                <optgroup label="👨 TRANG PHỤC NAM">
+                  {config.outfits.filter((o) => o.category === 'male').map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.emoji} {o.label} ({o.desc})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
+              {genderMode !== 'male' && (
+                <optgroup label="👩 TRANG PHỤC NỮ">
+                  {config.outfits.filter((o) => o.category === 'female').map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.emoji} {o.label} ({o.desc})
+                    </option>
+                  ))}
+                </optgroup>
+              )}
               <optgroup label="👔 TRANG PHỤC CHUNG / HỌC ĐƯỜNG">
                 {config.outfits.filter((o) => o.category === 'unisex').map((o) => (
                   <option key={o.id} value={o.id}>
@@ -301,7 +316,7 @@ const BatchIdPhotoGenerator = ({ models = [], onSendToLayout }) => {
             </label>
             <select
               value={genderMode}
-              onChange={(e) => setGenderMode(e.target.value)}
+              onChange={(e) => handleGenderModeChange(e.target.value)}
               disabled={isRunning}
               style={{ width: '100%', padding: '8px 10px', borderRadius: 8, background: 'var(--bg-elevated)', color: 'var(--text)', border: '1px solid var(--border)' }}
             >

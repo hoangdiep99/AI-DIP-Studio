@@ -8,8 +8,13 @@ import React from 'react';
 export const OutfitVisual = ({ id, className = '' }) => {
   switch (id) {
     case 'somi-nam':
+    case 'somi-nam-xanh':
+    case 'somi-nam-cavat':
     case 'somi-nu':
+    case 'somi-nu-xanh':
+    case 'somi-nu-no':
     case 'somi-trang':
+    case 'polo-nam':
       return (
         <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="48" height="48" rx="10" fill="#1e2235" />
@@ -29,36 +34,40 @@ export const OutfitVisual = ({ id, className = '' }) => {
       );
 
     case 'vest-nam':
+    case 'vest-nam-navy':
+    case 'vest-nam-xam':
       return (
         <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="48" height="48" rx="10" fill="#1e2235" />
           {/* Suit coat */}
-          <path d="M10 40V24L16 15H32L38 24V40H10Z" fill="#0F172A" />
+          <path d="M10 40V24L16 15H32L38 24V40H10Z" fill={id === 'vest-nam-navy' ? '#0f172a' : id === 'vest-nam-xam' ? '#334155' : '#020617'} />
           {/* White shirt triangle */}
           <path d="M20 15H28L24 25L20 15Z" fill="#F8FAFC" />
           {/* Red/burgundy Necktie */}
-          <path d="M23 20H25L26 22L24.5 35L24 37L23.5 35L22 22L23 20Z" fill="#DC2626" />
-          <path d="M22.5 19H25.5L25 22H23L22.5 19Z" fill="#991B1B" />
+          <path d="M23 20H25L26 22L24.5 35L24 37L23.5 35L22 22L23 20Z" fill={id === 'vest-nam-navy' ? '#2563EB' : '#DC2626'} />
+          <path d="M22.5 19H25.5L25 22H23L22.5 19Z" fill={id === 'vest-nam-navy' ? '#1D4ED8' : '#991B1B'} />
           {/* Suit lapels */}
-          <path d="M14 17L22 29L20 39L10 40L10 24L14 17Z" fill="#1E293B" stroke="#334155" strokeWidth="0.8" />
-          <path d="M34 17L26 29L28 39L38 40L38 24L34 17Z" fill="#1E293B" stroke="#334155" strokeWidth="0.8" />
+          <path d="M14 17L22 29L20 39L10 40L10 24L14 17Z" fill={id === 'vest-nam-xam' ? '#475569' : '#1E293B'} stroke="#334155" strokeWidth="0.8" />
+          <path d="M34 17L26 29L28 39L38 40L38 24L34 17Z" fill={id === 'vest-nam-xam' ? '#475569' : '#1E293B'} stroke="#334155" strokeWidth="0.8" />
           {/* Pocket square hint */}
           <rect x="13" y="27" width="5" height="1.5" rx="0.5" fill="#FFFFFF" />
         </svg>
       );
 
     case 'vest-nu':
+    case 'vest-nu-navy':
+    case 'vest-nu-trang':
       return (
         <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="48" height="48" rx="10" fill="#1e2235" />
           {/* Blazer body */}
-          <path d="M11 40V24L17 15H31L37 24V40H11Z" fill="#1E1B4B" />
+          <path d="M11 40V24L17 15H31L37 24V40H11Z" fill={id === 'vest-nu-trang' ? '#F8FAFC' : id === 'vest-nu-navy' ? '#0F172A' : '#1E1B4B'} />
           {/* Inner silk blouse (Soft cream) */}
           <path d="M19 15H29L24 27L19 15Z" fill="#FEF3C7" />
           <path d="M22 20C22 22 26 22 26 20" stroke="#F59E0B" strokeWidth="0.8" fill="none" />
           {/* Women lapels - curved tailored */}
-          <path d="M15 16L23 32L19 40L11 40L11 25L15 16Z" fill="#312E81" stroke="#4338CA" strokeWidth="0.8" />
-          <path d="M33 16L25 32L29 40L37 40L37 25L33 16Z" fill="#312E81" stroke="#4338CA" strokeWidth="0.8" />
+          <path d="M15 16L23 32L19 40L11 40L11 25L15 16Z" fill={id === 'vest-nu-trang' ? '#E2E8F0' : id === 'vest-nu-navy' ? '#1E293B' : '#312E81'} stroke="#4338CA" strokeWidth="0.8" />
+          <path d="M33 16L25 32L29 40L37 40L37 25L33 16Z" fill={id === 'vest-nu-trang' ? '#E2E8F0' : id === 'vest-nu-navy' ? '#1E293B' : '#312E81'} stroke="#4338CA" strokeWidth="0.8" />
         </svg>
       );
 
@@ -96,48 +105,15 @@ export const OutfitVisual = ({ id, className = '' }) => {
       );
 
     case 'aodai-xanh':
+    case 'aodai-hong':
       return (
         <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="48" height="48" rx="10" fill="#1e2235" />
-          <path d="M14 40V22L19 16H29L34 22V40H14Z" fill="#1D4ED8" />
-          <path d="M24 16C24 16 27 18 30 21" stroke="#60A5FA" strokeWidth="1.2" strokeLinecap="round" />
-          <path d="M20 16C20 13.5 28 13.5 28 16V17.5C28 17.5 24 18 20 17.5V16Z" fill="#2563EB" stroke="#1E40AF" strokeWidth="1" />
+          <path d="M14 40V22L19 16H29L34 22V40H14Z" fill={id === 'aodai-hong' ? '#F472B6' : '#1D4ED8'} />
+          <path d="M24 16C24 16 27 18 30 21" stroke={id === 'aodai-hong' ? '#FBCFE8' : '#60A5FA'} strokeWidth="1.2" strokeLinecap="round" />
+          <path d="M20 16C20 13.5 28 13.5 28 16V17.5C28 17.5 24 18 20 17.5V16Z" fill={id === 'aodai-hong' ? '#EC4899' : '#2563EB'} stroke={id === 'aodai-hong' ? '#DB2777' : '#1E40AF'} strokeWidth="1" />
           <circle cx="24" cy="18" r="1.8" fill="#FDE047" stroke="#CA8A04" strokeWidth="0.6" />
           <circle cx="24" cy="18" r="0.8" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'police':
-      return (
-        <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="48" height="48" rx="10" fill="#1e2235" />
-          {/* Police olive shirt */}
-          <path d="M12 40V23L17 15H31L36 23V40H12Z" fill="#2D4A32" />
-          {/* Inner tie and collar */}
-          <path d="M20 15H28L24 23L20 15Z" fill="#F8FAFC" />
-          <path d="M23 18H25L26 21L24.5 32L24 33L23.5 32L22 21L23 18Z" fill="#1E293B" />
-          {/* Red & Gold epaulets (cầu vai công an) */}
-          <rect x="13" y="16" width="5" height="3" rx="1" fill="#DC2626" stroke="#FBBF24" strokeWidth="0.8" />
-          <rect x="30" y="16" width="5" height="3" rx="1" fill="#DC2626" stroke="#FBBF24" strokeWidth="0.8" />
-          {/* Green lapel */}
-          <path d="M16 16L24 23L21 34L12 40V24L16 16Z" fill="#3B5E41" stroke="#1B3320" strokeWidth="0.8" />
-          <path d="M32 16L24 23L27 34L36 40V24L32 16Z" fill="#3B5E41" stroke="#1B3320" strokeWidth="0.8" />
-        </svg>
-      );
-
-    case 'army':
-      return (
-        <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="48" height="48" rx="10" fill="#1e2235" />
-          {/* Military khaki-olive uniform */}
-          <path d="M12 40V23L17 15H31L36 23V40H12Z" fill="#364935" />
-          {/* Red military rank tabs on collar (ve áo quân hàm đỏ) */}
-          <rect x="18" y="17" width="3" height="5" rx="0.5" fill="#DC2626" stroke="#F59E0B" strokeWidth="0.6" transform="rotate(-20 18 17)" />
-          <rect x="27" y="16" width="3" height="5" rx="0.5" fill="#DC2626" stroke="#F59E0B" strokeWidth="0.6" transform="rotate(20 27 16)" />
-          <path d="M16 15L24 22L32 15L35 23L24 28L13 23L16 15Z" fill="#4B6349" stroke="#253524" strokeWidth="0.8" />
-          {/* Brass buttons */}
-          <circle cx="24" cy="27" r="1.2" fill="#FBBF24" />
-          <circle cx="24" cy="33" r="1.2" fill="#FBBF24" />
         </svg>
       );
 

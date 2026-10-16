@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.4",
+  "latestVersion": "2.1.5",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.1.4 - Tách Riêng Trang Phục Nam/Nữ & Sửa Dropdown",
-  "changelog": "• SỬA LỖI DROPDOWN HÀNG LOẠT: Sửa triệt để lỗi không hiển thị chữ ở mục Trang phục và Phông nền trong Xử Lý Hàng Loạt.\n• TÁCH BIỆT TRANG PHỤC NAM & NỮ: Phân chia rõ ràng danh mục Trang phục Nam, Trang phục Nữ và Trang phục Chung ở cả 2 chế độ.\n• LƯỢC BỎ QUÂN PHỤC: Loại bỏ hoàn toàn trang phục công an, quân đội theo quy định và yêu cầu studio.\n• TỐI ƯU NHẬN DIỆN THỊ GIÁC: Tinh chỉnh thuật toán nhận diện giới tính không bị nhầm lẫn khi nam giới mặc áo tối màu hoặc phanh ngực.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.4/AI-DIP-Studio-Setup-2.1.4.exe",
+  "title": "AI DIP Studio v2.1.5 - Lọc Trang Phục Theo Giới Tính & Bổ Sung Mẫu Studio Đa Dạng",
+  "changelog": "• LỌC TRANG PHỤC CHẶT CHẼ THEO GIỚI TÍNH: Khi chọn Nam sẽ chỉ hiển thị trang phục Nam, khi chọn Nữ chỉ hiển thị trang phục Nữ (kèm nhóm chung), tự động chuyển đổi thông minh khi đổi giới tính.\n• BỔ SUNG TRANG PHỤC STUDIO ĐA DẠNG: Thêm nhiều mẫu vest hiện đại (vest đen, xanh navy, xám ghi), sơ mi cao cấp, áo dài truyền thống (trắng, đỏ, xanh ngọc, hồng) và áo polo trẻ trung.\n• ĐỒNG BỘ CHẾ ĐỘ HÀNG LOẠT: Hỗ trợ bộ lọc trang phục tương ứng trong Xử Lý Hàng Loạt theo từng nhóm giới tính đã chọn.\n• GIAO DIỆN TRỰC QUAN: Cập nhật icon minh họa sắc nét cho từng mẫu áo mới.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.5/AI-DIP-Studio-Setup-2.1.5.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

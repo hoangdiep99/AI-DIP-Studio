@@ -232,6 +232,14 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
     setGender(nextGender);
     const nextHair = config.hairStyles?.[nextGender.id]?.[0] || null;
     setHairStyle(nextHair);
+    // Tự động chuyển trang phục nếu trang phục hiện tại thuộc giới tính kia
+    if (nextGender.id === 'female' && outfit?.category === 'male') {
+      const defaultFemale = config.outfits.find(o => o.category === 'female') || config.outfits[0];
+      setOutfit(defaultFemale);
+    } else if (nextGender.id === 'male' && outfit?.category === 'female') {
+      const defaultMale = config.outfits.find(o => o.category === 'male') || config.outfits[0];
+      setOutfit(defaultMale);
+    }
   };
 
   const toggleBeauty = (id) => {
@@ -587,32 +595,40 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
           onToggle={toggleSection}
         >
           {/* Nhóm Nam */}
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#60a5fa', margin: '4px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>👨</span> Trang phục Nam
-          </div>
-          <div className="option-grid outfit-grid visual-grid" style={{ marginBottom: 16 }}>
-            {config.outfits.filter(o => o.category === 'male').map(o => (
-              <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
-                <OutfitVisual id={o.id} />
-                <div className="oc-label">{o.label}</div>
-                <div className="oc-desc">{o.desc}</div>
+          {gender?.id !== 'female' && (
+            <>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#60a5fa', margin: '4px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>👨</span> Trang phục Nam
               </div>
-            ))}
-          </div>
+              <div className="option-grid outfit-grid visual-grid" style={{ marginBottom: 16 }}>
+                {config.outfits.filter(o => o.category === 'male').map(o => (
+                  <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
+                    <OutfitVisual id={o.id} />
+                    <div className="oc-label">{o.label}</div>
+                    <div className="oc-desc">{o.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Nhóm Nữ */}
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#f472b6', margin: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span>👩</span> Trang phục Nữ
-          </div>
-          <div className="option-grid outfit-grid visual-grid" style={{ marginBottom: 16 }}>
-            {config.outfits.filter(o => o.category === 'female').map(o => (
-              <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
-                <OutfitVisual id={o.id} />
-                <div className="oc-label">{o.label}</div>
-                <div className="oc-desc">{o.desc}</div>
+          {gender?.id !== 'male' && (
+            <>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#f472b6', margin: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span>👩</span> Trang phục Nữ
               </div>
-            ))}
-          </div>
+              <div className="option-grid outfit-grid visual-grid" style={{ marginBottom: 16 }}>
+                {config.outfits.filter(o => o.category === 'female').map(o => (
+                  <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
+                    <OutfitVisual id={o.id} />
+                    <div className="oc-label">{o.label}</div>
+                    <div className="oc-desc">{o.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Nhóm Chung / Học đường */}
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-dim, #94a3b8)', margin: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
