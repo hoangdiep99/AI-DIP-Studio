@@ -28,6 +28,7 @@ const ProfessionalLayout = ({ incomingPhoto = null }) => {
   const [gapMm, setGapMm] = React.useState(2);
   const [marginMm, setMarginMm] = React.useState(3);
   const [fitMode, setFitMode] = React.useState('cover');
+  const [verticalOffset, setVerticalOffset] = React.useState(15);
   const [dpi, setDpi] = React.useState(DEFAULT_EXPORT_DPI);
   const [exporting, setExporting] = React.useState(false);
   const [exportStatus, setExportStatus] = React.useState('');
@@ -202,8 +203,9 @@ const ProfessionalLayout = ({ incomingPhoto = null }) => {
     const sw = w / scale;
     const sh = h / scale;
     const sx = (image.width - sw) / 2;
-    // Bố cục ảnh thẻ: khuôn mặt tập trung ở nửa trên. Căn 32% từ đỉnh để giữ trọn vẹn mái tóc và cổ áo.
-    const sy = Math.max(0, Math.min(image.height - sh, (image.height - sh) * 0.32));
+    // Bố cục ảnh thẻ: căn vị trí theo verticalOffset (mặc định 15% để giữ trọn vẹn mái tóc/đỉnh đầu như cỡ 4x6)
+    const vFactor = Math.max(0, Math.min(1, (verticalOffset ?? 15) / 100));
+    const sy = Math.max(0, Math.min(image.height - sh, (image.height - sh) * vFactor));
     ctx.drawImage(image, sx, sy, sw, sh, x, y, w, h);
   };
 
@@ -393,6 +395,50 @@ const ProfessionalLayout = ({ incomingPhoto = null }) => {
               <button type="button" className={fitMode === 'cover' ? 'active' : ''} onClick={() => setFitMode('cover')}>Fill ảnh</button>
               <button type="button" className={fitMode === 'contain' ? 'active' : ''} onClick={() => setFitMode('contain')}>Giữ nguyên ảnh</button>
             </div>
+
+            {fitMode === 'cover' && (
+              <div className="layout-vertical-crop">
+                <div className="range-header">
+                  <span>↕ Vị trí khuôn mặt (Trên / Dưới)</span>
+                  <span className="range-val">{verticalOffset}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="50"
+                  step="1"
+                  value={verticalOffset}
+                  onChange={(event) => setVerticalOffset(Number(event.target.value))}
+                  aria-label="Vị trí trên dưới đồng bộ các ảnh xắp xếp"
+                />
+                <div className="preset-row">
+                  <button
+                    type="button"
+                    className={'preset-btn' + (verticalOffset === 0 ? ' active' : '')}
+                    onClick={() => setVerticalOffset(0)}
+                  >
+                    Đỉnh đầu cao (0%)
+                  </button>
+                  <button
+                    type="button"
+                    className={'preset-btn' + (verticalOffset === 15 ? ' active' : '')}
+                    onClick={() => setVerticalOffset(15)}
+                  >
+                    Chuẩn 4x6 (15%)
+                  </button>
+                  <button
+                    type="button"
+                    className={'preset-btn' + (verticalOffset === 30 ? ' active' : '')}
+                    onClick={() => setVerticalOffset(30)}
+                  >
+                    Hạ thấp (30%)
+                  </button>
+                </div>
+                <span className="hint">
+                  Đồng bộ vị trí trên/dưới cho tất cả ảnh 3x4, 2x3, 3.5x4.5 để giữ trọn đỉnh đầu & mái tóc như cỡ 4x6.
+                </span>
+              </div>
+            )}
           </div>
 
           {photos.length > 0 && (
@@ -465,7 +511,16 @@ const ProfessionalLayout = ({ incomingPhoto = null }) => {
                         height: position.h * previewScale,
                       }}
                     >
-                      <img src={position.url} alt="" style={{ objectFit: fitMode }} loading="lazy" decoding="async" />
+                      <img
+                        src={position.url}
+                        alt=""
+                        style={{
+                          objectFit: fitMode,
+                          objectPosition: fitMode === 'cover' ? `50% ${verticalOffset}%` : 'center center',
+                        }}
+                        loading="lazy"
+                        decoding="async"
+                      />
                       {position.copyIndex > 1 && <span className="layout-copy-badge">#{position.copyIndex}</span>}
                     </div>
                   ))}

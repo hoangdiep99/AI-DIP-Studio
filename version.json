@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.9",
+  "latestVersion": "2.0.10",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.9 - Tối Ưu Bố Cục Kết Quả Vừa Vặn Khung Hình (Không Cần Cuộn)",
-  "changelog": "• BẢNG KẾT QUẢ VỪA VẶN HOÀN TOÀN: Tinh chỉnh kích thước ảnh so sánh và thanh điều khiển gọn gàng, hiển thị trọn vẹn 100% (Ảnh so sánh, Thông số tạo ảnh, Nút Tải PNG/JPG và Sắp xếp in ấn) ngay trên một màn hình mà không cần lăn chuột.\n• THANH THÔNG SỐ & NÚT BẤM HIỆN ĐẠI: Thiết kế thanh meta dạng pill bo tròn tinh tế, các nút bấm thao tác trực quan nằm ngay dưới ảnh thẻ.\n• BẢN BUILD MỚI NHẤT: Kèm toàn bộ các sửa lỗi so sánh ảnh và khởi động tức thì.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.9/AI-DIP-Studio-Setup-2.0.9.exe",
+  "title": "AI DIP Studio v2.0.10 - Thanh Trượt Căn Chỉnh Vị Trí In Ấn & Tự Động Đồng Bộ Lịch Sử",
+  "changelog": "• BỐ CỤC IN ẤN THÔNG MINH (3x4, 2x3, 3.5x4.5): Bổ sung thanh trượt tùy chỉnh vị trí trên/dưới đồng bộ cho toàn bộ ảnh trên khổ giấy, mặc định giữ trọn vẹn đỉnh đầu và mái tóc như ảnh 4x6, không bao giờ bị cắt tóc.\n• NÚT PRESET CĂN CHỈNH 1-CLICK: Đỉnh đầu cao (0%), Chuẩn thẻ 4x6 (15%), Hạ thấp (30%) cho thao tác nhanh chóng.\n• ĐỒNG BỘ LỊCH SỬ TỨC THÌ: Tab Lịch Sử tự động làm mới ngay khi chuyển tab hoặc khi tạo xong ảnh mới, bổ sung nút '↻ Đồng bộ / Làm mới', hiển thị số lượng ảnh từng danh mục và sao lưu kép IndexedDB + LocalStorage an toàn 100%.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.10/AI-DIP-Studio-Setup-2.0.10.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

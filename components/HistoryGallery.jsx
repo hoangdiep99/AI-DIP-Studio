@@ -23,23 +23,58 @@ const formatDate = (ts) => {
   }
 };
 
-const HistoryGallery = ({ onSendToLayout, refreshToken }) => {
-  const [items, setItems] = React.useState([]);
+const HistoryGallery = ({ onSendToLayout, refreshToken, active = false }) => {
+  const [allItems, setAllItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [syncing, setSyncing] = React.useState(false);
   const [filter, setFilter] = React.useState('all');
   const [preview, setPreview] = React.useState(null);
   const [error, setError] = React.useState('');
 
-  const load = React.useCallback(async () => {
-    setLoading(true);
-    const list = await getHistory(filter);
-    setItems(list);
-    setLoading(false);
-  }, [filter]);
+  const load = React.useCallback(async (isManual = false) => {
+    if (isManual) setSyncing(true);
+    else setLoading(true);
+    try {
+      const list = await getHistory('all');
+      setAllItems(list);
+    } catch (e) {
+      setError(e?.message || 'Không tải được lịch sử ảnh.');
+    } finally {
+      setLoading(false);
+      setSyncing(false);
+    }
+  }, []);
 
   React.useEffect(() => {
     load();
   }, [load, refreshToken]);
+
+  // Tự động đồng bộ mỗi khi người dùng bấm vào tab Lịch Sử
+  React.useEffect(() => {
+    if (active) {
+      load();
+    }
+  }, [active, load]);
+
+  // Tự động lắng nghe event phát ra khi vừa tạo xong ảnh mới
+  React.useEffect(() => {
+    const handleUpdate = () => load();
+    window.addEventListener('aidip:history-updated', handleUpdate);
+    return () => window.removeEventListener('aidip:history-updated', handleUpdate);
+  }, [load]);
+
+  const items = React.useMemo(() => {
+    if (filter === 'all') return allItems;
+    return allItems.filter((it) => it.type === filter);
+  }, [allItems, filter]);
+
+  const counts = React.useMemo(() => {
+    return {
+      all: allItems.length,
+      'id-photo': allItems.filter((it) => it.type === 'id-photo').length,
+      'restorer': allItems.filter((it) => it.type === 'restorer').length,
+    };
+  }, [allItems]);
 
   const handleDelete = async (id, event) => {
     event?.stopPropagation();
@@ -69,14 +104,19 @@ const HistoryGallery = ({ onSendToLayout, refreshToken }) => {
     <div className="history-page module-enter">
       <div className="history-hero">
         <div>
-          <h2>🕘 Lịch Sử Ảnh</h2>
-          <p>Toàn bộ ảnh thẻ và ảnh phục hồi bạn đã tạo được lưu ngay trên trình duyệt này để xem lại và tải lại bất cứ lúc nào — không tốn credit tạo lại.</p>
+          <h2>🕘 Lịch Sử Ảnh <span style={{ fontSize: '16px', color: 'var(--text-dim)', fontWeight: 600 }}>({allItems.length} ảnh)</span></h2>
+          <p>Toàn bộ ảnh thẻ và ảnh phục hồi bạn đã tạo được lưu trữ an toàn ngay trên máy tính của bạn — xem lại, tải về và sắp xếp in ấn bất cứ lúc nào mà không cần tạo lại.</p>
         </div>
-        {items.length > 0 && (
-          <button type="button" className="btn-secondary history-clear-btn" onClick={handleClearAll}>
-            🧹 Xóa {filter === 'all' ? 'tất cả' : 'mục đang lọc'}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <button type="button" className="btn-secondary history-refresh-btn" onClick={() => load(true)} disabled={loading || syncing}>
+            {syncing ? '🔄 Đang đồng bộ...' : '↻ Đồng bộ / Làm mới'}
           </button>
-        )}
+          {allItems.length > 0 && (
+            <button type="button" className="btn-secondary history-clear-btn" onClick={handleClearAll}>
+              🧹 Xóa {filter === 'all' ? 'tất cả' : 'mục đang lọc'}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="history-filter-bar">
@@ -87,7 +127,7 @@ const HistoryGallery = ({ onSendToLayout, refreshToken }) => {
             className={'history-filter-btn' + (filter === item.id ? ' active' : '')}
             onClick={() => setFilter(item.id)}
           >
-            {item.label}
+            {item.label} ({counts[item.id] ?? 0})
           </button>
         ))}
       </div>
@@ -97,12 +137,15 @@ const HistoryGallery = ({ onSendToLayout, refreshToken }) => {
       {loading ? (
         <div className="ws-empty">
           <div className="spinner" style={{ margin: '0 auto 16px' }}></div>
-          <p>Đang tải lịch sử ảnh...</p>
+          <p>Đang tải và đồng bộ lịch sử ảnh...</p>
         </div>
       ) : items.length === 0 ? (
         <div className="ws-empty history-empty">
           <div className="ws-empty-icon">🗂️</div>
-          <p>Chưa có ảnh nào trong lịch sử. Hãy tạo ảnh thẻ hoặc phục hồi ảnh cũ, ảnh sẽ tự động lưu lại đây.</p>
+          <p>Chưa có ảnh nào trong mục này. Khi bạn tạo ảnh thẻ hoặc phục hồi ảnh cũ, hệ thống sẽ tự động đồng bộ và lưu trữ tại đây.</p>
+          <button type="button" className="btn-secondary" style={{ marginTop: 12 }} onClick={() => load(true)}>
+            ↻ Thử đồng bộ lại
+          </button>
         </div>
       ) : (
         <div className="history-grid">

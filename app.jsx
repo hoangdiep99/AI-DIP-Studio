@@ -704,7 +704,7 @@ function App() {
           <ProfessionalLayout incomingPhoto={layoutSeed} />
         </section>
         <section style={{ display: activeTab === 'history' ? 'block' : 'none' }} aria-hidden={activeTab !== 'history'}>
-          <HistoryGallery onSendToLayout={sendPhotoToLayout} />
+          <HistoryGallery onSendToLayout={sendPhotoToLayout} active={activeTab === 'history'} />
         </section>
         <section style={{ display: activeTab === 'guide' ? 'block' : 'none' }} aria-hidden={activeTab !== 'guide'}>
           <SetupGuide onTestThanksPopup={() => setShowThanksModal(true)} />
