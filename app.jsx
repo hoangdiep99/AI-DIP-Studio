@@ -38,7 +38,7 @@ function App() {
   const [accountDebug, setAccountDebug] = useState(null);
   const [apiConfig, setApiConfigState] = useState(() => {
     const cfg = getApiConfig();
-    if (!cfg.mode || (cfg.mode === 'custom' && !cfg.geminiKey)) {
+    if (!cfg.mode || (cfg.mode === 'custom' && !cfg.geminiKey) || cfg.mode === 'openai') {
       cfg.mode = 'system';
       saveApiConfig(cfg);
     }
@@ -76,7 +76,9 @@ function App() {
   };
 
   useEffect(() => {
-    initApiConfigFromDisk();
+    initApiConfigFromDisk().then((cfg) => {
+      if (cfg) setApiConfigState(cfg);
+    });
     // Tự động kiểm tra bản cập nhật mới từ GitHub sau khi mở app 2.5s
     const timer = setTimeout(() => {
       handleCheckUpdate(false);
@@ -483,8 +485,9 @@ function App() {
 
 
 
-  const openConfigModal = () => {
-    setApiConfigState(getApiConfig());
+  const openConfigModal = async () => {
+    const cfg = await initApiConfigFromDisk();
+    setApiConfigState(cfg || getApiConfig());
     setShowConfigModal(true);
   };
 
@@ -572,19 +575,6 @@ function App() {
       // nên key sai/hết hạn chỉ phát hiện được lúc tạo ảnh, gây khó hiểu cho người dùng.
       if (apiConfig.mode === 'custom') {
         await validateGeminiKey(apiConfig);
-      } else if (apiConfig.mode === 'openai') {
-        try {
-          await validateOpenAiKey(apiConfig);
-        } catch (err) {
-          const msg = String(err?.message || '');
-          // Lỗi dạng "503 no available channels", hết quota/số dư là do TÀI KHOẢN
-          // (billing/hết tiền), không phải do API Key sai. Trường hợp này vẫn cho
-          // đăng nhập/lưu cấu hình để app dùng được các phần khác (lấy danh sách model...),
-          // chỉ riêng lúc tạo ảnh thật mới báo lỗi hết tiền.
-          const isBillingIssue = /503|no available channel|insufficient|quota|billing|pay-as-you-go|pay-per-request/i.test(msg);
-          if (!isBillingIssue) throw err;
-          console.warn('[handleLoginWithApi] Bỏ qua lỗi billing/quota để vẫn lưu cấu hình:', msg);
-        }
       }
       saveApiConfig(apiConfig);
 
@@ -858,7 +848,7 @@ function App() {
               <button className="close-btn" onClick={() => setShowConfigModal(false)}>×</button>
             </div>
             <form onSubmit={handleSaveConfig} className="modal-body">
-              <p className="modal-desc">Kết nối chính dùng AI VIDEO AUTO. RunningHub chỉ là phương án API dự phòng khi cần.</p>
+              <p className="modal-desc">Kết nối chính dùng AI VIDEO AUTO hoặc Google Gemini API Key cá nhân.</p>
 
               <div className="form-group">
                 <label>Chế độ kết nối:</label>
@@ -885,21 +875,8 @@ function App() {
                       onChange={() => setApiConfigState({ ...apiConfig, mode: 'custom' })}
                     />
                     <div>
-                      <strong>Gemini Key trực tiếp</strong>
+                      <strong>Google Gemini API Key cá nhân</strong>
                       <div style={{ fontSize: 12, color: 'var(--muted, #bbb)' }}>Dùng khi bạn gọi API Gemini Google trực tiếp.</div>
-                    </div>
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <input
-                      type="radio"
-                      name="api_mode"
-                      value="openai"
-                      checked={apiConfig.mode === 'openai'}
-                      onChange={() => setApiConfigState({ ...apiConfig, mode: 'openai' })}
-                    />
-                    <div>
-                      <strong>API dự phòng RunningHub / OpenAI-compatible</strong>
-                      <div style={{ fontSize: 12, color: 'var(--muted, #bbb)' }}>Chỉ dùng như phương án dự phòng nếu API chính AI VIDEO AUTO không dùng được.</div>
                     </div>
                   </label>
                 </div>
@@ -942,72 +919,6 @@ function App() {
                       Tên miền đăng ký tài khoản (mặc định: <code>aivideoauto.com</code>). <strong>Lưu ý:</strong> Không thêm <code>https://</code> hoặc dấu <code>/</code> ở cuối.
                     </div>
                   </div>
-                </div>
-              )}
-
-              {apiConfig.mode === 'openai' && (
-                <div className="custom-fields">
-                  <div className="form-group">
-                    <label htmlFor="openai_base_url">API Base URL dự phòng:</label>
-                    <input id="openai_base_url" type="text" placeholder="https://www.runninghub.ai" value={apiConfig.openaiBaseUrl || ''} onChange={(event) => setApiConfigState({ ...apiConfig, openaiBaseUrl: event.target.value.trim() })} required />
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>Chỉ dùng khi cần phương án dự phòng. Với RunningHub, nhập <code>https://www.runninghub.ai</code>.</div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="openai_api_key">API Key / Token:</label>
-                    <input id="openai_api_key" type="password" placeholder="sk-..." value={apiConfig.openaiApiKey || ''} onChange={(event) => setApiConfigState({ ...apiConfig, openaiApiKey: event.target.value })} required />
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>API Key/Token lấy từ trang quản lý API/OpenAPI của RunningHub hoặc nhà cung cấp bạn dùng.</div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="openai_model">Model:</label>
-                    <input id="openai_model" type="text" placeholder="nano-banana-pro-official/edit" value={apiConfig.openaiModel || ''} onChange={(event) => setApiConfigState({ ...apiConfig, openaiModel: event.target.value.trim() })} />
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>
-                      Với RunningHub, có thể dùng <code>nano-banana-pro-official/edit</code> hoặc bấm tải danh sách model nếu đã nhập API Key.
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="runninghub_mode">Chế độ RunningHub:</label>
-                    <select id="runninghub_mode" value={apiConfig.runningHubMode || 'standard'} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubMode: event.target.value })}>
-                      <option value="standard">Standard API</option>
-                      <option value="ai-app">AI App / ComfyUI workflow</option>
-                    </select>
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>
-                      Nếu bạn dùng link App/Workflow của RunningHub, chọn AI App và nhập WebApp ID + node mapping bên dưới.
-                    </div>
-                  </div>
-                  {(apiConfig.runningHubMode === 'ai-app' || apiConfig.runningHubWebappId) && (
-                    <>
-                      <div className="form-group">
-                        <label htmlFor="runninghub_webapp_id">RunningHub WebApp ID:</label>
-                        <input id="runninghub_webapp_id" type="text" placeholder="Ví dụ: 1948511948107689986" value={apiConfig.runningHubWebappId || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubWebappId: event.target.value.trim(), runningHubMode: 'ai-app' })} />
-                      </div>
-                      <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                        <div className="form-group">
-                          <label htmlFor="runninghub_prompt_node_id">Prompt nodeId:</label>
-                          <input id="runninghub_prompt_node_id" type="text" placeholder="3" value={apiConfig.runningHubPromptNodeId || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubPromptNodeId: event.target.value.trim() })} />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="runninghub_prompt_field">Prompt fieldName:</label>
-                          <input id="runninghub_prompt_field" type="text" placeholder="text" value={apiConfig.runningHubPromptField || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubPromptField: event.target.value.trim() })} />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="runninghub_image_node_id">Image nodeId:</label>
-                          <input id="runninghub_image_node_id" type="text" placeholder="Bỏ trống nếu workflow không cần ảnh" value={apiConfig.runningHubImageNodeId || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubImageNodeId: event.target.value.trim() })} />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="runninghub_image_field">Image fieldName:</label>
-                          <input id="runninghub_image_field" type="text" placeholder="image" value={apiConfig.runningHubImageField || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubImageField: event.target.value.trim() })} />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="runninghub_ratio_node_id">Ratio nodeId:</label>
-                          <input id="runninghub_ratio_node_id" type="text" placeholder="28" value={apiConfig.runningHubRatioNodeId || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubRatioNodeId: event.target.value.trim() })} />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="runninghub_ratio_field">Ratio fieldName:</label>
-                          <input id="runninghub_ratio_field" type="text" placeholder="select" value={apiConfig.runningHubRatioField || ''} onChange={(event) => setApiConfigState({ ...apiConfig, runningHubRatioField: event.target.value.trim() })} />
-                        </div>
-                      </div>
-                    </>
-                  )}
                 </div>
               )}
 

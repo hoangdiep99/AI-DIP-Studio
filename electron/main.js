@@ -16,13 +16,38 @@ const __dirname = path.dirname(__filename);
 
 let mainWindow = null;
 
+function getWindowState() {
+  try {
+    const windowStateFile = path.join(app.getPath('userData'), 'window-state.json');
+    if (fs.existsSync(windowStateFile)) {
+      return JSON.parse(fs.readFileSync(windowStateFile, 'utf-8'));
+    }
+  } catch (e) {}
+  return { width: 1360, height: 860, isMaximized: false };
+}
+
+function saveWindowState(win) {
+  if (!win || win.isDestroyed()) return;
+  try {
+    const windowStateFile = path.join(app.getPath('userData'), 'window-state.json');
+    const isMaximized = win.isMaximized();
+    if (!isMaximized) {
+      const bounds = win.getBounds();
+      fs.writeFileSync(windowStateFile, JSON.stringify({ ...bounds, isMaximized: false }, null, 2), 'utf-8');
+    } else {
+      fs.writeFileSync(windowStateFile, JSON.stringify({ isMaximized: true }, null, 2), 'utf-8');
+    }
+  } catch (e) {}
+}
+
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1360,
-    height: 860,
+  const state = getWindowState();
+  const windowOptions = {
+    width: state.width || 1360,
+    height: state.height || 860,
     minWidth: 960,
     minHeight: 640,
-    title: 'AI DIP Studio v2.0.11',
+    title: 'AI DIP Studio v2.0.12',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,
@@ -32,11 +57,24 @@ function createWindow() {
       nodeIntegration: false,
       preload: path.join(__dirname, 'preload.cjs'),
     },
-  });
+  };
+  if (state.x !== undefined && state.y !== undefined && !state.isMaximized) {
+    windowOptions.x = state.x;
+    windowOptions.y = state.y;
+  }
+  mainWindow = new BrowserWindow(windowOptions);
+
+  if (state.isMaximized) {
+    mainWindow.maximize();
+  }
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
+
+  mainWindow.on('resize', () => saveWindowState(mainWindow));
+  mainWindow.on('move', () => saveWindowState(mainWindow));
+  mainWindow.on('close', () => saveWindowState(mainWindow));
 
   // Hỗ trợ F12 / Ctrl+Shift+I (DevTools) và F5 (Reload)
   mainWindow.webContents.on('before-input-event', (event, input) => {

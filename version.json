@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.11",
+  "latestVersion": "2.0.12",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.11 - Lưu File Ảnh & Cấu Hình API Trực Tiếp Vào %APPDATA%",
-  "changelog": "• LƯU FILE ẢNH THẬT (.PNG) VÀO Ổ CỨNG: Toàn bộ ảnh thẻ và ảnh phục hồi được lưu thành file ảnh thực tế trực tiếp trong thư mục %APPDATA%\\ai-dip-studio\\history_photos.\n• NÚT '📂 MỞ THƯ MỤC ẢNH': 1-click mở ngay thư mục chứa ảnh trên máy tính trong Windows Explorer.\n• LƯU CẤU HÌNH API RA FILE ĐĨA (api_config.json): Lưu trữ Access Token, Gemini Keys và domain trực tiếp vào %APPDATA%\\ai-dip-studio\\api_config.json, không bao giờ bị mất cấu hình khi cập nhật hay cài lại app.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.11/AI-DIP-Studio-Setup-2.0.11.exe",
+  "title": "AI DIP Studio v2.0.12 - Ghi Nhớ Cửa Sổ, Phân Loại Lịch Sử & Fix Access Token",
+  "changelog": "• GHI NHỚ KÍCH THƯỚC CỬA SỔ: Tự động lưu và phục hồi kích thước rộng/cao cũng như trạng thái phóng to khi mở lại app.\n• PHÂN LOẠI LỊCH SỬ RÕ RÀNG: Bộ lọc Lịch Sử Ảnh chuẩn xác giữa '🗂️ Tất cả', '🪪 Ảnh thẻ' và '🖼️ Phục hồi ảnh cũ'.\n• TINH GỌN CẤU HÌNH API: Loại bỏ tùy chọn RunningHub dự phòng theo yêu cầu, tập trung vào AI VIDEO AUTO và Gemini API Key.\n• PHÓNG TO ICON / LOGO APP: Cắt bỏ khoảng trống viền, xuất chuẩn đa phân giải 256x256 trên màn hình Desktop Windows.\n• LƯU BỀN VỮNG ACCESS TOKEN: Sửa lỗi ánh xạ key giúp Access Token được lưu trữ và tự động phục hồi chính xác từ ổ cứng khi tắt/mở lại app.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.12/AI-DIP-Studio-Setup-2.0.12.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

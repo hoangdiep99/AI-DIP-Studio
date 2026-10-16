@@ -11,11 +11,11 @@
 
 ---
 
-## 📥 Tải Về Trực Tiếp (Bản Mới Nhất v2.0.11)
+## 📥 Tải Về Trực Tiếp (Bản Mới Nhất v2.0.12)
 
 | Hệ Điều Hành | Loại Bản Cài | Link Tải Trực Tiếp |
 | :--- | :--- | :--- |
-| **Windows 10 / 11** | **Bộ Cài Đặt Tự Động (.exe)** | [👉 Tải AI-DIP-Studio-Setup-2.0.11.exe](https://github.com/hoangdiep99/AI-DIP-Studio/releases/latest/download/AI-DIP-Studio-Setup-2.0.11.exe) |
+| **Windows 10 / 11** | **Bộ Cài Đặt Tự Động (.exe)** | [👉 Tải AI-DIP-Studio-Setup-2.0.12.exe](https://github.com/hoangdiep99/AI-DIP-Studio/releases/latest/download/AI-DIP-Studio-Setup-2.0.12.exe) |
 
 ---
 

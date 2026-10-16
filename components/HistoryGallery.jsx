@@ -9,7 +9,7 @@ const TYPE_LABELS = {
 };
 
 const FILTERS = [
-  { id: 'all', label: 'Tất cả' },
+  { id: 'all', label: '🗂️ Tất cả' },
   { id: 'id-photo', label: '🪪 Ảnh thẻ' },
   { id: 'restorer', label: '🖼️ Phục hồi ảnh cũ' },
 ];
