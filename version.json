@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.7",
+  "latestVersion": "2.0.8",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.7 - Khắc Phục Lỗi Tối Màn Hình (Black Screen) & ErrorBoundary",
-  "changelog": "• KHẮC PHỤC TRIỆT ĐỂ LỖI ĐEN MÀN HÌNH: Tắt xung đột tăng tốc GPU phần cứng trên Windows (disableHardwareAcceleration), chấm dứt hoàn toàn hiện tượng đang dùng tự động tối đen màn hình.\n• LỚP BẢO VỆ ERROR BOUNDARY: Tích hợp màng bảo vệ giao diện React, nếu có bất kỳ lỗi phát sinh sẽ hiển thị thông báo thân thiện và nút Tải Lại thay vì bị sập màn hình đen.\n• BẬT PHÍM TẮT TIỆN ÍCH: Bổ sung phím tắt F5 (Tải lại trang) và F12 (Bật DevTools) hỗ trợ xử lý sự cố nhanh chóng.\n• KHÔI PHỤC VÙNG KẾT QUẢ TRUNG TÂM: Toàn bộ vùng làm việc giữa tập trung vào kết quả ảnh thẻ và in ấn sắc nét.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.7/AI-DIP-Studio-Setup-2.0.7.exe",
+  "title": "AI DIP Studio v2.0.8 - Sửa Lỗi ComparisonSlider, Khắc Phục Mở App & Tối Ưu Cập Nhật",
+  "changelog": "• SỬA LỖI COMPARISONSLIDER: Bổ sung import linh kiện ComparisonSlider trong bộ tạo ảnh thẻ, khắc phục triệt để lỗi ReferenceError khi ảnh vừa tạo xong.\n• KHẮC PHỤC LỖI MỞ APP PHẢI CHỈNH KÍCH THƯỚC: Bật lại cơ chế dựng hình chuẩn và kích hoạt ready-to-show, mở app hiển thị ngay lập tức không cần co kéo cửa sổ.\n• TỐI ƯU HỆ THỐNG KIỂM TRA CẬP NHẬT: Ưu tiên GitHub Releases API thời gian thực không bị trễ bộ nhớ đệm, nhận diện bản mới ngay khi phát hành.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.8/AI-DIP-Studio-Setup-2.0.8.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

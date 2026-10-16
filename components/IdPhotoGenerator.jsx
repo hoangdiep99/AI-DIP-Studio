@@ -9,6 +9,7 @@ import { addHistoryItem } from '../lib/history.js';
 import { analyzeImageWithAI, buildSmartSuggestions } from '../lib/visionAnalysis.js';
 import ImageUploader from './ImageUploader.jsx';
 import ModelPicker from './ModelPicker.jsx';
+import ComparisonSlider from './ComparisonSlider.jsx';
 import { OutfitVisual, HairVisual } from './StudioVisualIcons.jsx';
 
 

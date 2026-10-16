@@ -14,9 +14,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Vô hiệu hóa tăng tốc phần cứng GPU để tránh triệt để lỗi đen màn hình (black screen) trên Windows
-app.disableHardwareAcceleration();
-
 let mainWindow = null;
 
 function createWindow() {
@@ -25,15 +22,20 @@ function createWindow() {
     height: 860,
     minWidth: 960,
     minHeight: 640,
-    title: 'AI DIP Studio v2.0.7',
+    title: 'AI DIP Studio v2.0.8',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,
+    show: false,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
       preload: path.join(__dirname, 'preload.cjs'),
     },
+  });
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
   });
 
   // Hỗ trợ F12 / Ctrl+Shift+I (DevTools) và F5 (Reload)
