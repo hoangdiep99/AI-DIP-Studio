@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.4",
+  "latestVersion": "2.0.5",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.4 - Tải & Cài Đặt Tự Động 1-Click Trong Ứng Dụng",
-  "changelog": "• TỰ ĐỘNG TẢI & CÀI ĐẶT 1-CLICK: Tải trực tiếp bản cập nhật ngay bên trong ứng dụng với thanh tiến trình trực quan (dung lượng đã tải, tốc độ MB/s, phần trăm hoàn thành), hoàn toàn không cần mở trình duyệt web hay tìm file thủ công.\n• TỰ ĐỘNG KHỞI CHẠY BỘ CÀI & RESTART: Sau khi tải xong 100%, nút [⚡ Cài Đặt & Khởi Động Lại Ngay] tự động kích hoạt bộ cài Inno Setup và thoát app cũ để cập nhật mượt mà.\n• BẢNG LỰA CHỌN NỔI BẬT VÙNG TRUNG TÂM: Mở rộng các mục (Trang phục, Kiểu tóc, Phông nền, Kích thước, Giới tính, Làm đẹp, Model AI) hiển thị bảng chọn nổi bật kích thước lớn ngay giữa vùng trung tâm với icon đồ họa trực quan.\n• ẨN BỎ TỈ LỆ RƯỜM RÀ: Tối giản lựa chọn Model AI, loại bỏ danh sách 11 tỷ lệ thừa để tự động áp dụng chính xác tỷ lệ ảnh thẻ dọc chuẩn theo mục Kích thước (4x6 cm, 3x4 cm...).",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.4/AI-DIP-Studio-Setup-2.0.4.exe",
+  "title": "AI DIP Studio v2.0.5 - Đồng Bộ Phiên Bản Động & Khắc Phục Hiển Thị Logo",
+  "changelog": "• ĐỒNG BỘ PHIÊN BẢN ĐỘNG: Gắn biến phiên bản firmware động trực tiếp vào thanh tiêu đề Header, phần Tác giả và modal Cấu hình kết nối, chấm dứt hoàn toàn hiện tượng hiển thị lệch bản cũ v2.0.0.\n• KHẮC PHỤC HIỂN THỊ LOGO THƯƠNG HIỆU: Đóng gói và load chính xác file SVG Logo AI DIP Studio qua bundler pipeline, đảm bảo hiển thị sắc nét, không còn lỗi ảnh vỡ.\n• TỰ ĐỘNG TẢI & CÀI ĐẶT 1-CLICK: Tải trực tiếp bản cập nhật ngay bên trong ứng dụng với thanh tiến trình trực quan, sau khi tải xong có nút Cài Đặt & Khởi Động Lại Ngay.\n• BẢNG LỰA CHỌN TRUNG TÂM NỔI BẬT: Bảng trực quan hóa trang phục, kiểu tóc, phông nền, kích thước ngay giữa màn hình làm việc.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.5/AI-DIP-Studio-Setup-2.0.5.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

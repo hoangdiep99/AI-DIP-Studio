@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { openUpdateDownload } from '../lib/updateService.js';
+import { openUpdateDownload, CURRENT_VERSION } from '../lib/updateService.js';
 
 export const UpdateModal = ({ updateInfo, checking, onCheckAgain, onClose }) => {
   const [downloading, setDownloading] = useState(false);
@@ -79,7 +79,7 @@ export const UpdateModal = ({ updateInfo, checking, onCheckAgain, onClose }) => 
           <div className="update-modal-title">
             <span className="update-rocket-icon">🚀</span>
             <h3>Cập Nhật Phần Mềm</h3>
-            <span className="version-pill">v{updateInfo?.currentVersion || '2.0.0'}</span>
+            <span className="version-pill">v{updateInfo?.currentVersion || CURRENT_VERSION}</span>
           </div>
           {!downloading && <button className="close-btn" onClick={onClose}>×</button>}
         </div>
@@ -183,11 +183,11 @@ export const UpdateModal = ({ updateInfo, checking, onCheckAgain, onClose }) => 
               <div className="update-latest-icon">✓</div>
               <h4>Bạn đang dùng phiên bản mới nhất!</h4>
               <p>
-                Phiên bản hiện tại <strong>v{updateInfo?.currentVersion || '2.0.0'}</strong> đã là bản cập nhật mới nhất từ GitHub.
+                Phiên bản hiện tại <strong>v{updateInfo?.currentVersion || CURRENT_VERSION}</strong> đã là bản cập nhật mới nhất từ GitHub.
               </p>
 
               <div className="update-changelog-box" style={{ marginTop: '14px' }}>
-                <strong>Tính năng nổi bật trong bản v{updateInfo?.currentVersion || '2.0.0'}:</strong>
+                <strong>Tính năng nổi bật trong bản v{updateInfo?.currentVersion || CURRENT_VERSION}:</strong>
                 <pre className="update-changelog-text">{updateInfo?.changelog || 'Các tính năng tạo ảnh thẻ AI, phục hồi ảnh cũ và layout in ấn.'}</pre>
               </div>
 

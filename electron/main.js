@@ -22,7 +22,7 @@ function createWindow() {
     height: 860,
     minWidth: 960,
     minHeight: 640,
-    title: 'AI DIP Studio v2.0.4',
+    title: 'AI DIP Studio v2.0.5',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,

@@ -4,6 +4,7 @@ import { gommoApi, getApiConfig, saveApiConfig, toItems } from './lib/api.js';
 import { sanitizeImageModelList } from './lib/modelCatalog.js';
 import { validateGeminiKey, validateOpenAiKey, fetchOpenAiModels, fetchOpenAiBalance } from './lib/generate.js';
 import donateQrImage from './assets/qr-donate.jpg';
+import appLogo from './assets/logo.svg';
 
 
 
@@ -14,7 +15,7 @@ import ProfessionalLayout from './components/ProfessionalLayout.jsx';
 import HistoryGallery from './components/HistoryGallery.jsx';
 import SetupGuide from './components/SetupGuide.jsx';
 import UpdateModal from './components/UpdateModal.jsx';
-import { checkForAppUpdate } from './lib/updateService.js';
+import { checkForAppUpdate, CURRENT_VERSION } from './lib/updateService.js';
 
 
 
@@ -618,12 +619,12 @@ function App() {
       <header className="app-header">
         <div className="app-logo">
           <div className="logo-mark">
-            <img src="./assets/logo.svg" alt="AI DIP Studio" className="logo-svg-img" />
+            <img src={appLogo} alt="AI DIP Studio" className="logo-svg-img" />
           </div>
           <div className="logo-text">
             <div className="logo-title-row">
               <h1>AI DIP Studio</h1>
-              <span className="version-tag">v2.0.0</span>
+              <span className="version-tag">v{CURRENT_VERSION}</span>
             </div>
             <span>Tạo ảnh thẻ, phục chế ảnh bằng AI</span>
           </div>
@@ -720,7 +721,7 @@ function App() {
           <div className="author-contact-copy">
             <div className="author-title-line">
               <span className="author-contact-kicker">Tác giả</span>
-              <strong>AI DIP Studio <span className="version-pill">v2.0.0</span></strong>
+              <strong>AI DIP Studio <span className="version-pill">v{CURRENT_VERSION}</span></strong>
             </div>
             <p>Hỗ trợ cài đặt Capture One • Haicaoyun • VPN • Google Drive • Cân màu màn hình.</p>
           </div>
@@ -851,7 +852,7 @@ function App() {
         <div className="modal-backdrop" onClick={() => setShowConfigModal(false)}>
           <div className="config-modal-card" onClick={(event) => event.stopPropagation()}>
             <div className="modal-header">
-              <h3>⚙️ Cấu hình Kết nối API <span className="version-pill">v2.0.0</span></h3>
+              <h3>⚙️ Cấu hình Kết nối API <span className="version-pill">v{CURRENT_VERSION}</span></h3>
               <button className="close-btn" onClick={() => setShowConfigModal(false)}>×</button>
             </div>
             <form onSubmit={handleSaveConfig} className="modal-body">
