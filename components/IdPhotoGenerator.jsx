@@ -820,11 +820,26 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
         <CropModal
           imageUrl={cropTarget === 'uploaded' ? uploaded?.url : result}
           initialRatio={size.id === '3x4' ? '3:4' : size.id === '2x3' ? '2:3' : size.id === '3.5x4.5' ? '3.5:4.5' : size.id === '1x1' ? '1:1' : '4:6'}
-          onConfirm={(croppedUrl) => {
+          onConfirm={(croppedUrl, croppedRatio) => {
             if (cropTarget === 'uploaded') {
               setUploaded((prev) => ({ ...prev, url: croppedUrl, base64: croppedUrl }));
             } else if (cropTarget === 'result') {
               setResult(croppedUrl);
+              if (croppedRatio?.id) {
+                const ratioMap = {
+                  '4:6': '4x6',
+                  '3:4': '3x4',
+                  '2:3': '2x3',
+                  '3.5:4.5': '3.5x4.5',
+                };
+                const matchedId = ratioMap[croppedRatio.id];
+                if (matchedId) {
+                  const matchedSize = (config.photoSizes || []).find((s) => s.id === matchedId);
+                  if (matchedSize) {
+                    setSize(matchedSize);
+                  }
+                }
+              }
             }
             setCropTarget(null);
           }}

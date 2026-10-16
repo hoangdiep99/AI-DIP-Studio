@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 /**
  * CropModal - Khung canh thước & crop ảnh chuẩn Studio
  * Hỗ trợ:
  * - Tỉ lệ chuẩn ảnh thẻ (4:6, 3:4, 2:3, 3.5:4.5, 1:1)
  * - Di chuyển (Pan), Thu phóng (Zoom 1x-3x), Xoay nắn góc nghiêng (-20° đến +20°)
- * - Thước gióng tỉ lệ chuẩn Studio: Đỉnh đầu, Trục mắt, Cằm, Trục giữa
- * - Xuất Canvas chất lượng cao chuẩn nét
+ * - Thước gióng tỉ lệ chuẩn Studio: Đỉnh đầu (12%), Trục mắt (42%), Cằm (72%), Trục giữa (50%)
+ * - Xuất Canvas độ phân giải cao, khớp 100% chuẩn xác với khung nhìn người dùng thấy
  */
 const RATIOS = [
   { id: '4:6', label: '4×6 cm (2:3)', ratio: 4 / 6, w: 1200, h: 1800 },
@@ -27,9 +27,37 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
 
   const containerRef = useRef(null);
   const imgRef = useRef(null);
+  const [imgSize, setImgSize] = useState({ w: 0, h: 0 });
   const [imgLoaded, setImgLoaded] = useState(false);
 
   const currentRatioObj = RATIOS.find((r) => r.id === selectedRatioId) || RATIOS[0];
+  const viewH = 380;
+  const viewW = Math.round(viewH * currentRatioObj.ratio);
+
+  // Cập nhật kích thước ảnh gốc khi tải xong
+  const handleImageLoad = (e) => {
+    const nw = e.target.naturalWidth || e.target.width;
+    const nh = e.target.naturalHeight || e.target.height;
+    if (nw && nh) {
+      setImgSize({ w: nw, h: nh });
+      setImgLoaded(true);
+    }
+  };
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth) {
+      setImgSize({
+        w: imgRef.current.naturalWidth,
+        h: imgRef.current.naturalHeight,
+      });
+      setImgLoaded(true);
+    }
+  }, [imageUrl]);
+
+  // baseScale để ảnh ban đầu phủ kín (cover) khung crop viewport
+  const baseScale = (imgSize.w > 0 && imgSize.h > 0)
+    ? Math.max(viewW / imgSize.w, viewH / imgSize.h)
+    : 1;
 
   const handleReset = () => {
     setZoom(1);
@@ -43,17 +71,49 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
     setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
   };
 
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      setIsDragging(true);
+      setDragStart({ x: touch.clientX - pan.x, y: touch.clientY - pan.y });
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const touch = e.touches[0];
     setPan({
-      x: e.clientX - dragStart.x,
-      y: e.clientY - dragStart.y,
+      x: touch.clientX - dragStart.x,
+      y: touch.clientY - dragStart.y,
     });
   };
 
-  const handleMouseUp = () => {
+  const handleTouchEnd = () => {
     setIsDragging(false);
   };
+
+  // Kéo chuột mượt mà ngay cả khi chuột di chuyển ra ngoài viền khung
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const onMouseMove = (e) => {
+      setPan({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y,
+      });
+    };
+
+    const onMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [isDragging, dragStart]);
 
   const handleWheel = (e) => {
     e.preventDefault();
@@ -64,6 +124,9 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
   const handleApply = () => {
     if (!imgRef.current) return;
     const img = imgRef.current;
+    const nw = img.naturalWidth || img.width;
+    const nh = img.naturalHeight || img.height;
+    if (!nw || !nh) return;
 
     const targetW = currentRatioObj.w;
     const targetH = currentRatioObj.h;
@@ -75,27 +138,22 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // Tính toán tỉ lệ giữa viewport màn hình và kích thước xuất thật
-    const container = containerRef.current;
-    const viewW = container ? container.clientWidth : 300;
-    const viewH = container ? container.clientHeight : 450;
+    // Tỉ lệ scale giữa kích thước xuất canvas và viewport trên màn hình
     const scaleFactor = targetW / viewW;
 
     ctx.save();
-    // Di chuyển về tâm canvas + offset dịch chuyển
+    // Di chuyển về tâm canvas + offset dịch chuyển đồng bộ tỉ lệ thực
     ctx.translate(targetW / 2 + pan.x * scaleFactor, targetH / 2 + pan.y * scaleFactor);
     ctx.rotate((rotation * Math.PI) / 180);
 
-    // Tính toán độ scale để ảnh vừa khung ban đầu (cover)
-    const baseScale = Math.max(viewW / img.naturalWidth, viewH / img.naturalHeight);
+    // finalScale trên Canvas khớp 100% tỉ lệ hiển thị (baseScale * zoom * scaleFactor)
     const finalScale = baseScale * zoom * scaleFactor;
-
     ctx.scale(finalScale, finalScale);
-    ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
+    ctx.drawImage(img, -nw / 2, -nh / 2, nw, nh);
     ctx.restore();
 
     const croppedDataUrl = canvas.toDataURL('image/png', 0.98);
-    onConfirm(croppedDataUrl);
+    onConfirm(croppedDataUrl, currentRatioObj);
   };
 
   return (
@@ -119,7 +177,10 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
                 key={item.id}
                 type="button"
                 className={'history-filter-btn' + (selectedRatioId === item.id ? ' active' : '')}
-                onClick={() => setSelectedRatioId(item.id)}
+                onClick={() => {
+                  setSelectedRatioId(item.id);
+                  setPan({ x: 0, y: 0 });
+                }}
                 style={{ padding: '6px 12px', fontSize: 12 }}
               >
                 {item.label}
@@ -132,7 +193,7 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
             style={{
               position: 'relative',
               width: '100%',
-              height: 380,
+              height: 400,
               background: '#090a0f',
               borderRadius: 12,
               border: '2px solid rgba(255,255,255,0.08)',
@@ -144,9 +205,9 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
               cursor: isDragging ? 'grabbing' : 'grab',
             }}
             onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
             onWheel={handleWheel}
           >
             {/* Viewport Frame */}
@@ -154,32 +215,33 @@ const CropModal = ({ imageUrl, initialRatio = '4:6', onConfirm, onCancel }) => {
               ref={containerRef}
               style={{
                 position: 'relative',
-                width: 380 * currentRatioObj.ratio,
-                height: 380,
-                maxHeight: 380,
-                maxWidth: '90%',
+                width: viewW,
+                height: viewH,
+                maxHeight: viewH,
+                maxWidth: '92%',
                 boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.72)',
                 border: '2px solid var(--accent, #6366f1)',
                 overflow: 'hidden',
                 borderRadius: 4,
               }}
             >
-              {/* Ảnh gốc với transform pan, zoom, rotation */}
+              {/* Ảnh gốc với transform đồng bộ chuẩn baseScale, pan, zoom, rotation */}
               <img
                 ref={imgRef}
                 src={imageUrl}
                 alt="Crop preview"
-                onLoad={() => setImgLoaded(true)}
+                onLoad={handleImageLoad}
                 draggable={false}
                 style={{
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
-                  transform: `translate(calc(-50% + ${pan.x}px), calc(-50% + ${pan.y}px)) rotate(${rotation}deg) scale(${zoom})`,
+                  transform: `translate(calc(-50% + ${pan.x}px), calc(-50% + ${pan.y}px)) rotate(${rotation}deg) scale(${baseScale * zoom})`,
                   transformOrigin: 'center center',
                   pointerEvents: 'none',
                   maxWidth: 'none',
                   maxHeight: 'none',
+                  userSelect: 'none',
                   transition: isDragging ? 'none' : 'transform 0.05s ease-out',
                 }}
               />

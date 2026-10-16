@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.5",
+  "latestVersion": "2.1.6",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.1.5 - Lọc Trang Phục Theo Giới Tính & Bổ Sung Mẫu Studio Đa Dạng",
-  "changelog": "• LỌC TRANG PHỤC CHẶT CHẼ THEO GIỚI TÍNH: Khi chọn Nam sẽ chỉ hiển thị trang phục Nam, khi chọn Nữ chỉ hiển thị trang phục Nữ (kèm nhóm chung), tự động chuyển đổi thông minh khi đổi giới tính.\n• BỔ SUNG TRANG PHỤC STUDIO ĐA DẠNG: Thêm nhiều mẫu vest hiện đại (vest đen, xanh navy, xám ghi), sơ mi cao cấp, áo dài truyền thống (trắng, đỏ, xanh ngọc, hồng) và áo polo trẻ trung.\n• ĐỒNG BỘ CHẾ ĐỘ HÀNG LOẠT: Hỗ trợ bộ lọc trang phục tương ứng trong Xử Lý Hàng Loạt theo từng nhóm giới tính đã chọn.\n• GIAO DIỆN TRỰC QUAN: Cập nhật icon minh họa sắc nét cho từng mẫu áo mới.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.5/AI-DIP-Studio-Setup-2.1.5.exe",
+  "title": "AI DIP Studio v2.1.6 - Sửa Triệt Để Lỗi Canh Thước & Crop Ảnh Chuẩn Studio",
+  "changelog": "• SỬA LỖI CROP BỊ LỆCH BỐ CỤC / THU NHỎ KHI XẾP LAYOUT: Khắc phục triệt để lỗi sai lệch hệ số scale giữa khung nhìn xem trước và Canvas xuất ra; ảnh sau khi crop sẽ khớp chính xác 100% từng pixel với đường gióng thước (đỉnh đầu, mắt, cằm) bạn căn chỉnh.\n• TỰ ĐỘNG ĐỒNG BỘ KHỔ ẢNH VÀO LAYOUT: Khi crop lại ảnh sang khổ 4x6, 3x4, 2x3 hay 3.5x4.5, app tự động đồng bộ kích thước sang mục 'Layout In Ấn' để sắp kín khổ giấy in ngay lập tức mà không cần chỉnh lại thủ công.\n• TỐI ƯU THAO TÁC CROP: Hỗ trợ rê chuột mượt mà không bị ngắt quãng kể cả khi kéo ra ngoài khung, bổ sung cảm ứng chạm màn hình và cuộn chuột phóng to thu nhỏ tiện lợi.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.6/AI-DIP-Studio-Setup-2.1.6.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
