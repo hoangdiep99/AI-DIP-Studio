@@ -1,0 +1,47 @@
+{
+  "name": "ai-dip-studio",
+  "private": true,
+  "version": "2.0.0",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron:dist": "set CSC_IDENTITY_AUTO_DISCOVERY=false&& npm run build && set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder --win --dir",
+    "electron:installer": "(npm run electron:dist & \"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe\" installer.iss)"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^2.0.7",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@capacitor/android": "6.2.1",
+    "@capacitor/cli": "6.2.1",
+    "@capacitor/core": "6.2.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "vite": "5.4.11"
+  },
+  "build": {
+    "appId": "com.diepfoto.aidipstudio",
+    "productName": "AI DIP Studio",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.ico"
+    }
+  }
+}

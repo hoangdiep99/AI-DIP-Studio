@@ -1,0 +1,8 @@
+{
+  "appId": "com.diepfoto.aidipstudio",
+  "appName": "AI DIP Studio",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -1,0 +1,306 @@
+====================================================================
+TÀI LIỆU API — AI VIDEO AUTO / GOMMO (aivideoauto.com)
+Tổng hợp từ mã nguồn app AI DIP Studio (lib/api.js, lib/generate.js,
+lib/mediaJobs.js, lib/modelCatalog.js, lib/autoai.js, app.jsx)
+Ngày tổng hợp: 2026-07-21
+====================================================================
+
+LƯU Ý QUAN TRỌNG
+--------------------------------------------------------------------
+- Trang https://aivideoauto.com/ là một Single Page App (React), không
+  công khai tài liệu API dạng văn bản trên URL đó — bản thân trang chỉ
+  trả về HTML + JS bundle của ứng dụng web.
+- Tài liệu dưới đây được tổng hợp lại bằng cách đọc mã nguồn thực tế
+  của app (các file lib/api.js, lib/generate.js, lib/mediaJobs.js,
+  lib/modelCatalog.js, lib/autoai.js) — đây chính là cách app hiện tại
+  đang gọi API của hệ thống AI VIDEO AUTO / Gommo.
+- Nếu nhà cung cấp có trang tài liệu API chính thức riêng (ví dụ dạng
+  Swagger/Postman), hãy cho biết URL cụ thể để mình tổng hợp thêm.
+
+
+1. TỔNG QUAN HỆ THỐNG
+--------------------------------------------------------------------
+Ứng dụng hỗ trợ 3 chế độ kết nối API (config "mode"):
+
+  a) "system"  — Gọi qua Gommo Mini App Bridge (window.gommoMiniApp.call)
+                 khi app chạy nhúng trong hệ thống AI VIDEO AUTO.
+  b) "custom"  — Gọi trực tiếp Google Gemini API bằng API Key cá nhân
+                 của người dùng (không qua server trung gian).
+  c) "openai"  — Gọi tới nhà cung cấp tương thích chuẩn OpenAI
+                 (ví dụ RunningHub, laozhang.ai) bằng API Key riêng.
+
+Ngoài ra còn 1 lớp gọi API dùng chung "gommoApi()" — tự động thử nhiều
+host/backend (fallback) khi không dùng bridge:
+  - https://api.aivideoauto.com
+  - https://api.gommo.net
+  - window.location.origin (origin hiện tại của app)
+
+Base URL mặc định (customEndpoint): https://api.aivideoauto.com
+
+
+2. XÁC THỰC (AUTHENTICATION)
+--------------------------------------------------------------------
+Có 2 cách xác thực chính, gửi kèm mỗi request:
+
+  - access_token: gửi trong body/query dưới dạng field "access_token",
+    HOẶC gửi qua header "Authorization: Bearer <access_token>".
+  - domain: field bắt buộc gửi kèm mỗi request — là "domain/app slug"
+    của ứng dụng trên hệ thống AI VIDEO AUTO / Gommo (KHÔNG phải domain
+    của server API). Nếu access_token hợp lệ mà domain sai sẽ gặp lỗi
+    dạng "Cant access #1".
+  - x-api-key: nếu KHÔNG có access_token, app có thể gửi Gemini API Key
+    qua header "x-api-key" (chỉ dùng cho luồng gọi trực tiếp Gemini).
+
+Content-Type mặc định cho các request POST: application/x-www-form-urlencoded
+
+Ví dụ header khi có access_token:
+  Authorization: Bearer <ACCESS_TOKEN>
+  Content-Type: application/x-www-form-urlencoded
+
+Body mẫu (form-urlencoded):
+  access_token=<token>&domain=<domain-app>&<...other params>
+
+
+3. DANH SÁCH ENDPOINT (theo lib/api.js, lib/generate.js, lib/mediaJobs.js, lib/autoai.js)
+--------------------------------------------------------------------
+
+3.1. Lấy thông tin tài khoản / số dư Credits
+  POST /api/apps/go-mmo/ai/me          (endpoint chính, ưu tiên)
+  POST /ai/me                          (dự phòng)
+  POST /api/me                         (dự phòng)
+  (App cũng thử lại bằng GET nếu POST không thành công)
+
+  Body: { access_token, domain }
+  Response (rút gọn, dạng JSON):
+  {
+    "balancesInfo": { "credits_ai": <number>, ... },
+    "userInfo": { "name", "email", "phone", ... },
+    "currentSubscription": { "name", "status", ... }
+  }
+  Ghi chú: App tìm số dư credit bằng cách quét nhiều field khả dĩ:
+  balancesInfo.credits_ai, balancesInfo.credit_ai, balancesInfo.credits,
+  balancesInfo.balance, credits, credit, balance, wallet.balance, v.v.
+
+3.2. Lấy danh sách Model AI (ảnh)
+  POST /ai/models
+  (Dự phòng thử thêm): 
+    GET/POST /api/apps/go-mmo/ai/models
+    GET/POST /api/apps/go-mmo/models
+    GET/POST /api/apps/go-mmo/ai/model-list
+    GET/POST /api/apps/go-mmo/ai/model
+    GET/POST /ai/model/list
+    GET/POST /api/v1/models
+
+  Body gửi kèm: { type: "image", access_token, domain }
+  Response (rút gọn):
+  {
+    "success": true,
+    "data": [
+      {
+        "id_base": "google_image_gen_banana_2",
+        "model": "google_image_gen_banana_2",
+        "name": "Nano Banana 2",
+        "description": "...",
+        "server": "Google_veo",
+        "status": "ON",
+        "ratios": [ { "type": "1:1", "name": "1:1" }, ... ],
+        "resolutions": [ { "type": "1k", "name": "1K" }, ... ],
+        "modes": [ { "type": "vip2", "name": "vip2" }, ... ],
+        "price": <number optional>
+      },
+      ...
+    ]
+  }
+
+3.3. Tạo ảnh AI (Generate Image)
+  POST /ai/generateImage
+
+  Body (application/x-www-form-urlencoded):
+  {
+    action_type: "create" (hoặc theo model.action_type),
+    sync: "false",
+    model: "<model id_base hoặc model>",
+    prompt: "<nội dung prompt>",
+    privacy: "PRIVATE",
+    ratio: "<vd 1:1, 3:4, ...>",          // nếu model hỗ trợ
+    resolution: "<vd 1k, 2k, 4k>",         // nếu model hỗ trợ
+    mode: "<vd standard, fast, vip2>",     // nếu model hỗ trợ chế độ
+    editImage: "true",                     // chỉ gửi khi có ảnh gốc để sửa
+    base64Image: "<base64 ảnh gốc>",       // chỉ gửi khi editImage = true
+    access_token, domain
+  }
+
+  Response tạo job (dạng bất đồng bộ):
+  {
+    "imageInfo": { "id_base": "<jobId>", "status": "PENDING_ACTIVE", ... }
+    // hoặc "data": { "imageInfo": {...} }
+  }
+  App lấy "jobId" từ imageInfo.id_base / id / image_id để polling kết quả.
+
+3.4. Kiểm tra trạng thái / lấy kết quả ảnh (Polling)
+  POST /ai/image
+
+  Body: { id_base: "<jobId>", id: "<jobId>", access_token, domain }
+  Polling định kỳ mỗi 15 giây (lần đầu chờ ~1.2s), timeout tối đa 3 giờ.
+
+  Response:
+  {
+    "imageInfo": {
+      "id_base": "<jobId>",
+      "status": "SUCCESS" | "PENDING_ACTIVE" | "PROCESSING" | "ERROR" | ...,
+      "url": "<link ảnh kết quả>",
+      "download_url": "<link tải xuống>"
+    }
+  }
+  Trạng thái SUCCESS -> lấy url/download_url làm kết quả cuối.
+  Trạng thái lỗi (ERROR, FAILED, LIMIT_TIME, CANCELLED...) -> ném lỗi,
+  hiển thị message tương ứng (vd "Hết thời gian xử lý (Limit Time)").
+
+3.5. Tạo Video AI (Generate Video) — theo lib/autoai.js
+  POST /ai/create-video
+  Body: { model, prompt, ..., access_token, domain }
+
+3.6. Kiểm tra trạng thái Video
+  POST /ai/video
+  Body: { id_base / videoId, access_token, domain }
+
+3.7. Danh sách Video đã tạo
+  POST /ai/videos
+
+3.8. Upload ảnh (một số luồng dùng riêng)
+  POST /ai/image-upload
+  Body: { base64Image, access_token, domain }
+
+
+4. QUY TẮC TỰ ĐỘNG DÒ HOST (FALLBACK LOGIC) — lib/api.js: gommoApi()
+--------------------------------------------------------------------
+Khi không chạy trong Bridge (chế độ "system"), app thử endpoint theo
+thứ tự các host sau, dừng lại ngay khi có response HTTP OK:
+
+  - Trên môi trường dev (localhost, npm run dev):
+      /api-proxy/aivideoauto
+      /api-proxy/gommo
+    (Do CORS chặn gọi trực tiếp domain thật từ localhost, Vite dev
+     server có proxy nội bộ định nghĩa trong vite.config.js)
+
+  - Trên production:
+      customEndpoint (mặc định https://api.aivideoauto.com)
+      https://api.aivideoauto.com
+      https://api.gommo.net
+      window.location.origin
+
+  Với mỗi host, app còn thử thêm 2 biến thể path nếu endpoint không có
+  tiền tố sẵn:
+      <host><endpoint>
+      <host>/ai<endpoint>
+      <host>/api<endpoint>
+
+
+5. DANH SÁCH MODEL ẢNH AI HIỆN CÓ (Fallback / mặc định trong app)
+--------------------------------------------------------------------
+Các model dưới đây được dùng làm fallback khi API /ai/models không phản
+hồi hoặc trả về danh sách rỗng (xem lib/modelCatalog.js, lib/api.js):
+
+  1) GPT Image 2            (id_base: imagegen_2_0)
+     - ratios: 1:1, 3:4, 4:3
+     - resolutions: 1k, 2k, 4k
+     - modes: low, medium, high
+
+  2) Grok Image              (id_base: grok_imagine)
+     - ratios: 1:1, 3:4
+     - resolutions: 1k, 2k, 4k
+     - modes: quality
+
+  3) Nano Banana Pro         (id_base: google_image_gen_banana_pro)
+     - ratios: 1:1, 3:4 (ưu tiên hiển thị thêm: auto, 2:3, 16:9, 9:16, 4:5)
+     - resolutions: 1k, 2k, 4k
+     - modes: relaxed, standard, fast, vip, vip2, vip3
+
+  4) Nano Banana 2 x Cheap   (id_base: google_image_gen_banana_2_cheap)
+     - ratios: 1:1, 3:4
+     - resolutions: 1k, 2k
+     - modes: cheap
+
+  5) Nano Banana 2           (id_base: google_image_gen_banana_2)
+     - ratios: 1:1, 3:4
+     - resolutions: 1k, 2k
+     - modes: vip, vip2, vip3
+     - (Model khuyến nghị mặc định trong app: resolution=1k, mode=vip2)
+
+  6) Nano Banana             (id_base: google_image_gen_banana)
+     - ratios: 1:1, 3:4
+     - resolutions: 1k, 2k
+     - modes: standard, fast
+
+Bảng giá Credits ước tính theo resolution/mode (trích lib/modelCatalog.js,
+đơn vị: Credits/ảnh — chỉ mang tính tham khảo nội bộ app, có thể khác giá
+thực tế hệ thống công bố):
+
+  GPT Image 2:
+    low:    1k=720   2k=900   4k=1080  8k=1500  10k=2000  12k=2500
+    medium: 1k=1296  2k=2592  4k=3888  8k=4230  10k=4590  12k=4950
+    high:   1k=4536  2k=9072  4k=13608 8k=10000 10k=14400 12k=16200
+    basic:  1k=450   2k=550   4k=650   8k=900   10k=1200  12k=1500
+
+  Grok Image (quality):    1k=200  2k=600  4k=1000  8k=1500  10k=2000  12k=2500
+
+  Nano Banana 2 x Cheap (cheap): 1k=200 2k=300 4k=450 8k=800 10k=1200 12k=1500
+
+  Nano Banana 2:
+    vip/vip1:  1k=400  2k=800  4k=1400  8k=1800  10k=2200  12k=2800
+    vip2/vip3: 1k=400  2k=700  4k=1200  8k=1700  10k=2100  12k=2600
+
+  Nano Banana Pro:
+    relaxed:  1k=300  2k=400  4k=500   8k=900   10k=1400  12k=2000
+    standard: 1k=400  2k=550  4k=700   8k=1100  10k=1600  12k=2200
+    fast:     1k=500  2k=700  4k=1000  8k=1400  10k=1900  12k=2500
+    vip:      1k=600  2k=900  4k=1500  8k=1900  10k=2300  12k=3000
+    vip2:     1k=700  2k=900  4k=1700  8k=2300  10k=2800  12k=3500
+    vip3:     1k=600  2k=900  4k=1500  8k=1900  10k=2300  12k=3000
+
+  Nano Banana:
+    standard: 1k=400  2k=550  4k=700   8k=1100  10k=1600  12k=2200
+    fast:     1k=500  2k=700  4k=1000  8k=1400  10k=1900  12k=2500
+
+
+6. TRẠNG THÁI JOB (STATUS) CHUẨN HÓA — lib/mediaJobs.js
+--------------------------------------------------------------------
+Ảnh (image):
+  - Thành công: SUCCESS
+  - Đang xử lý: PENDING_ACTIVE, PROCESSING, PENDING_PROCESSING, PENDING
+
+Video:
+  - Thành công: SUCCESS, SUCCEEDED, COMPLETED, COMPLETE, DONE, FINISHED,
+    READY, RENDERED, GENERATED, MEDIA_GENERATION_STATUS_SUCCESSFUL,
+    SUCCESSFUL
+  - Đang xử lý: PENDING, PENDING_ACTIVE, PENDING_PROCESSING, PROCESSING,
+    ACTIVE, QUEUED, IN_QUEUE, WAITING, RUNNING, IN_PROGRESS, CREATED,
+    SUBMITTED, STARTED, MEDIA_GENERATION_STATUS_PENDING/ACTIVE/
+    PROCESSING/RUNNING
+
+Thất bại (cả ảnh & video): ERROR, FAILED, FAIL, LIMIT_TIME, TIMEOUT,
+  TIMED_OUT, CANCELLED, CANCELED, REJECTED, UNKNOWN,
+  MEDIA_GENERATION_STATUS_FAILED, PUBLIC_ERROR_VIDEO_GENERATION_TIMED_OUT
+
+Vi phạm chính sách: status hoặc message chứa "UNSAFE" hoặc
+  "PUBLIC_ERROR_UNSAFE_GENERATION" -> hiển thị "Vi phạm chính sách".
+
+
+7. TRANG NẠP CREDITS
+--------------------------------------------------------------------
+  https://aivideoauto.com/prices
+
+
+8. GHI CHÚ TRIỂN KHAI / LỖI THƯỜNG GẶP
+--------------------------------------------------------------------
+- Lỗi "Cant access #1": thường do gửi sai "domain" (phải là domain/app
+  slug cấu hình trên hệ thống AI VIDEO AUTO, không phải domain server API).
+- Lỗi "Failed to fetch": do CORS/network — cần chạy qua proxy dev
+  (vite.config.js) hoặc dùng Bridge (chế độ "system") khi nhúng trong
+  mini app thật.
+- access_token để RỖNG sẽ báo rõ trong debug info của app: "(RỖNG — chưa
+  nhập Access Token trong phần Cấu hình!)".
+
+====================================================================
+Hết tài liệu.
+====================================================================

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1123"/>
+      <stop offset="50%" stop-color="#161938"/>
+      <stop offset="100%" stop-color="#090a14"/>
+    </linearGradient>
+
+    <!-- Outer Glow Ring -->
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="35%" stop-color="#6366f1"/>
+      <stop offset="70%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+
+    <!-- Aperture Blade Gradient -->
+    <linearGradient id="bladeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e2448"/>
+      <stop offset="100%" stop-color="#0d1024"/>
+    </linearGradient>
+
+    <!-- Core Star Glow -->
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="1"/>
+      <stop offset="40%" stop-color="#6366f1" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Inner Golden Core -->
+    <radialGradient id="coreGold" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="25%" stop-color="#fef08a"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </radialGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Base Rounded Container with Glossy Rim -->
+  <rect x="6" y="6" width="116" height="116" rx="28" fill="url(#bgGrad)" stroke="url(#ringGrad)" stroke-width="2.5" filter="url(#glow)"/>
+
+  <!-- Subtle Studio Grid Accent -->
+  <circle cx="64" cy="64" r="46" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- Outer Camera Aperture Ring -->
+  <circle cx="64" cy="64" r="40" fill="none" stroke="url(#ringGrad)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Aperture Blades (Camera Iris) -->
+  <g transform="translate(64,64)">
+    <!-- 6 Stylized Shutter Blades -->
+    <path d="M 0,-36 L 16,-18 L 8,-3 Z" fill="url(#bladeGrad)" stroke="url(#ringGrad)" stroke-width="1"/>
+    <path d="M 0,-36 L 16,-18 L 8,-3 Z" fill="url(#bladeGrad)" stroke="url(#ringGrad)" stroke-width="1" transform="rotate(60)"/>
+    <path d="M 0,-36 L 16,-18 L 8,-3 Z" fill="url(#bladeGrad)" stroke="url(#ringGrad)" stroke-width="1" transform="rotate(120)"/>
+    <path d="M 0,-36 L 16,-18 L 8,-3 Z" fill="url(#bladeGrad)" stroke="url(#ringGrad)" stroke-width="1" transform="rotate(180)"/>
+    <path d="M 0,-36 L 16,-18 L 8,-3 Z" fill="url(#bladeGrad)" stroke="url(#ringGrad)" stroke-width="1" transform="rotate(240)"/>
+    <path d="M 0,-36 L 16,-18 L 8,-3 Z" fill="url(#bladeGrad)" stroke="url(#ringGrad)" stroke-width="1" transform="rotate(300)"/>
+
+    <!-- Luminous Central Aura -->
+    <circle cx="0" cy="0" r="18" fill="url(#starGlow)"/>
+
+    <!-- Central AI Neural Sparkle (4-point Star) -->
+    <path d="M 0,-15 Q 0,0 -15,0 Q 0,0 0,15 Q 0,0 15,0 Q 0,0 0,-15 Z" fill="url(#coreGold)"/>
+    <!-- Diagonal Mini Sparks -->
+    <path d="M 0,-8 Q 0,0 -8,0 Q 0,0 0,8 Q 0,0 8,0 Q 0,0 0,-8 Z" fill="#ffffff" transform="rotate(45)"/>
+
+    <!-- Center Bright Dot -->
+    <circle cx="0" cy="0" r="2.5" fill="#ffffff"/>
+  </g>
+
+  <!-- Modern Lens Reflection Arc -->
+  <path d="M 32,34 A 40 40 0 0 1 82,24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Top Right Small AI Sparkle -->
+  <path d="M 100,24 Q 100,29 95,29 Q 100,29 100,34 Q 100,29 105,29 Q 100,29 100,24 Z" fill="#38bdf8"/>
+</svg>
