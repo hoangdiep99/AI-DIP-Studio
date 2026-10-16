@@ -15,6 +15,7 @@ import ProfessionalLayout from './components/ProfessionalLayout.jsx';
 import HistoryGallery from './components/HistoryGallery.jsx';
 import SetupGuide from './components/SetupGuide.jsx';
 import UpdateModal from './components/UpdateModal.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import { checkForAppUpdate, CURRENT_VERSION } from './lib/updateService.js';
 
 
@@ -1073,5 +1074,9 @@ function App() {
 }
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
+);
 export default App;

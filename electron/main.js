@@ -14,6 +14,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Vô hiệu hóa tăng tốc phần cứng GPU để tránh triệt để lỗi đen màn hình (black screen) trên Windows
+app.disableHardwareAcceleration();
+
 let mainWindow = null;
 
 function createWindow() {
@@ -22,7 +25,7 @@ function createWindow() {
     height: 860,
     minWidth: 960,
     minHeight: 640,
-    title: 'AI DIP Studio v2.0.6',
+    title: 'AI DIP Studio v2.0.7',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,
@@ -31,6 +34,25 @@ function createWindow() {
       nodeIntegration: false,
       preload: path.join(__dirname, 'preload.cjs'),
     },
+  });
+
+  // Hỗ trợ F12 / Ctrl+Shift+I (DevTools) và F5 (Reload)
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F12' || (input.control && input.shift && input.key.toLowerCase() === 'i')) {
+      mainWindow.webContents.toggleDevTools();
+      event.preventDefault();
+    }
+    if (input.key === 'F5' || (input.control && input.key.toLowerCase() === 'r')) {
+      mainWindow.reload();
+      event.preventDefault();
+    }
+  });
+
+  mainWindow.webContents.on('render-process-gone', (event, details) => {
+    console.error('Renderer process gone:', details);
+    if (details.reason !== 'clean-exit') {
+      mainWindow?.reload();
+    }
   });
 
   // Mở link ngoài bằng trình duyệt hệ thống

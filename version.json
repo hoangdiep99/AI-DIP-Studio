@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.6",
+  "latestVersion": "2.0.7",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.6 - Khôi Phục Giao Diện Kết Quả Trung Tâm & Khắc Phục Bộ Cài",
-  "changelog": "• KHÔI PHỤC VÙNG KẾT QUẢ TRUNG TÂM: Trả lại toàn bộ không gian làm việc chính cho khu vực Kết quả ảnh thẻ hoàn thiện, loại bỏ hoàn toàn bảng lựa chọn che khuất ở giữa theo đúng yêu cầu.\n• KHẮC PHỤC TRIỆT ĐỂ BỘ CÀI ĐẶT: Sửa lỗi khóa tiến trình Inno Setup khi đang chạy bản cũ, đảm bảo bộ cài v2.0.6 luôn ghi đè và cập nhật chính xác 100% mã nguồn mới nhất vào máy.\n• TỰ ĐỘNG ĐÓNG ỨNG DỤNG CŨ KHI CÀI ĐẶT: Bộ cài Inno Setup được trang bị cơ chế CloseApplications=yes giúp tự đóng phiên bản cũ để thay thế file sạch sẽ.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.6/AI-DIP-Studio-Setup-2.0.6.exe",
+  "title": "AI DIP Studio v2.0.7 - Khắc Phục Lỗi Tối Màn Hình (Black Screen) & ErrorBoundary",
+  "changelog": "• KHẮC PHỤC TRIỆT ĐỂ LỖI ĐEN MÀN HÌNH: Tắt xung đột tăng tốc GPU phần cứng trên Windows (disableHardwareAcceleration), chấm dứt hoàn toàn hiện tượng đang dùng tự động tối đen màn hình.\n• LỚP BẢO VỆ ERROR BOUNDARY: Tích hợp màng bảo vệ giao diện React, nếu có bất kỳ lỗi phát sinh sẽ hiển thị thông báo thân thiện và nút Tải Lại thay vì bị sập màn hình đen.\n• BẬT PHÍM TẮT TIỆN ÍCH: Bổ sung phím tắt F5 (Tải lại trang) và F12 (Bật DevTools) hỗ trợ xử lý sự cố nhanh chóng.\n• KHÔI PHỤC VÙNG KẾT QUẢ TRUNG TÂM: Toàn bộ vùng làm việc giữa tập trung vào kết quả ảnh thẻ và in ấn sắc nét.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.7/AI-DIP-Studio-Setup-2.0.7.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
