@@ -31,6 +31,7 @@ function App() {
   const [showCreditsModal, setShowCreditsModal] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [accountInfo, setAccountInfo] = useState(null);
+  const [loadingAccount, setLoadingAccount] = useState(false);
   const [accountError, setAccountError] = useState('');
   const [accountDebug, setAccountDebug] = useState(null);
   const [apiConfig, setApiConfigState] = useState(() => {

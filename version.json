@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.0",
+  "latestVersion": "2.0.1",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.0 - Nâng Cấp Toàn Diện & Gợi Ý Thông Minh",
-  "changelog": "• TỐI ƯU TỐC ĐỘ TẠO ẢNH: Rút ngắn chu kỳ polling xuống 2.5s, nhận ảnh tức thì chỉ sau ~10 - 15 giây.\n• TỈ LỆ ẢNH CHUẨN 4x6: Đặt mặc định kích thước 4x6 cm (chuẩn Hộ chiếu / CCCD / Thẻ VN), thuật toán căn tỷ lệ 32% từ đỉnh giúp giữ trọn vẹn đỉnh đầu và mái tóc.\n• BỐ CỤC CHUẨN STUDIO: Đặt lựa chọn Model AI và Phông nền lên vị trí đầu tiên, tích hợp bộ gợi ý thông minh từ AI Chân dung.\n• BỘ ICON ĐỒ HỌA TRỰC QUAN: Nâng cấp icon trang phục (Sơ mi trắng, Vest nam cà vạt, Áo dài trắng, Công an, Quân đội...) và kiểu tóc (Tóc dài thẳng, Uốn sóng, Rẽ ngôi 7/3, Undercut, Búi gọn...) giúp nhận diện tức thì.\n• THANH TÁC GIẢ THÔNG MINH: Thu gọn kích thước, tự động trượt lên khi rê chuột gần đáy màn hình, phóng to mã QR donate khi rê chuột.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.0/AI-DIP-Studio-Setup-2.0.0.exe",
+  "title": "AI DIP Studio v2.0.1 - Sửa Lỗi Màn Hình Đen & Hoàn Thiện Tải Cập Nhật Tự Động",
+  "changelog": "• KHẮC PHỤC TRIỆT ĐỂ LỖI MÀN HÌNH ĐEN: Bổ sung khai báo state loadingAccount giúp ứng dụng khởi động mượt mà, tải giao diện tức thì.\n• TỐI ƯU TỐC ĐỘ TẠO ẢNH: Rút ngắn chu kỳ polling xuống 2.5s, nhận ảnh tức thì chỉ sau ~10 - 15 giây.\n• TỈ LỆ ẢNH CHUẨN 4x6: Đặt mặc định kích thước 4x6 cm (chuẩn Hộ chiếu / CCCD / Thẻ VN), thuật toán căn tỷ lệ 32% từ đỉnh giúp giữ trọn vẹn đỉnh đầu và mái tóc.\n• BỐ CỤC CHUẨN STUDIO: Đặt lựa chọn Model AI và Phông nền lên vị trí đầu tiên, tích hợp bộ gợi ý thông minh từ AI Chân dung.\n• BỘ ICON ĐỒ HỌA TRỰC QUAN: Nâng cấp icon trang phục (Sơ mi trắng, Vest nam cà vạt, Áo dài trắng, Công an, Quân đội...) và kiểu tóc (Tóc dài thẳng, Uốn sóng, Rẽ ngôi 7/3, Undercut, Búi gọn...) giúp nhận diện tức thì.\n• THANH TÁC GIẢ THÔNG MINH: Thu gọn kích thước, tự động trượt lên khi rê chuột gần đáy màn hình, phóng to mã QR donate khi rê chuột.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.1/AI-DIP-Studio-Setup-2.0.1.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

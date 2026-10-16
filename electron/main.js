@@ -19,7 +19,7 @@ function createWindow() {
     height: 860,
     minWidth: 960,
     minHeight: 640,
-    title: 'AI DIP Studio v2.0.0',
+    title: 'AI DIP Studio v2.0.1',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,
@@ -35,6 +35,14 @@ function createWindow() {
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: 'deny' };
+  });
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('FAILED TO LOAD:', errorCode, errorDescription, validatedURL);
+  });
+
+  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`[Renderer] ${message} (${sourceId}:${line})`);
   });
 
   mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
