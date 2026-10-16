@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.12",
+  "latestVersion": "2.1.0",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.12 - Ghi Nhớ Cửa Sổ, Phân Loại Lịch Sử & Fix Access Token",
-  "changelog": "• GHI NHỚ KÍCH THƯỚC CỬA SỔ: Tự động lưu và phục hồi kích thước rộng/cao cũng như trạng thái phóng to khi mở lại app.\n• PHÂN LOẠI LỊCH SỬ RÕ RÀNG: Bộ lọc Lịch Sử Ảnh chuẩn xác giữa '🗂️ Tất cả', '🪪 Ảnh thẻ' và '🖼️ Phục hồi ảnh cũ'.\n• TINH GỌN CẤU HÌNH API: Loại bỏ tùy chọn RunningHub dự phòng theo yêu cầu, tập trung vào AI VIDEO AUTO và Gemini API Key.\n• PHÓNG TO ICON / LOGO APP: Cắt bỏ khoảng trống viền, xuất chuẩn đa phân giải 256x256 trên màn hình Desktop Windows.\n• LƯU BỀN VỮNG ACCESS TOKEN: Sửa lỗi ánh xạ key giúp Access Token được lưu trữ và tự động phục hồi chính xác từ ổ cứng khi tắt/mở lại app.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.12/AI-DIP-Studio-Setup-2.0.12.exe",
+  "title": "AI DIP Studio v2.1.0 - Khung Canh Thước Crop Studio & Xử Lý Ảnh Hàng Loạt",
+  "changelog": "• KHUNG CANH THƯỚC STUDIO: Canh chỉnh tỉ lệ chuẩn quốc tế với các đường gióng Đỉnh đầu (12%), Trục mắt (42%), Cằm (72%) và Trục giữa đối xứng. Hỗ trợ xoay nắn góc nghiêng, zoom và pan trực quan.\n• XỬ LÝ ẢNH HÀNG LOẠT (BATCH MODE): Kéo thả nhiều ảnh cùng lúc, cấu hình đồng bộ trang phục/phông nền, tự động tạo ảnh hàng loạt theo hàng đợi và tải về dễ dàng.\n• BỘ CÀI ĐẶT 1-CLICK TỐI GIẢN: Cài đặt cực nhanh, tự tạo shortcut Desktop và tự động mở app ngay sau khi cài (chuẩn trải nghiệm Chép Thẻ Nhanh Pro).\n• POPUP TÁC GIẢ & QR GỬI CÀ PHÊ: Cập nhật định kỳ 35 phút kèm QR donate gửi cà phê tiện lợi.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.0/AI-DIP-Studio-Setup-2.1.0.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

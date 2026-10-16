@@ -11,6 +11,8 @@ import ImageUploader from './ImageUploader.jsx';
 import ModelPicker from './ModelPicker.jsx';
 import ComparisonSlider from './ComparisonSlider.jsx';
 import { OutfitVisual, HairVisual } from './StudioVisualIcons.jsx';
+import CropModal from './CropModal.jsx';
+import BatchIdPhotoGenerator from './BatchIdPhotoGenerator.jsx';
 
 
 const getModelLabel = (model) => model?.name || model?.title || model?.model || model?.id_base || 'Model AI';
@@ -119,6 +121,8 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
   const [result, setResult] = React.useState(null);
   const [resultMeta, setResultMeta] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [generatorMode, setGeneratorMode] = React.useState('single'); // 'single' | 'batch'
+  const [cropTarget, setCropTarget] = React.useState(null); // null | 'uploaded' | 'result'
   const [liveElapsed, setLiveElapsed] = React.useState(0);
   const [error, setError] = React.useState(null);
   const [logEntries, setLogEntries] = React.useState([]);
@@ -348,14 +352,49 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
   };
 
   return (
-    <div className="split-layout module-enter smooth-layout">
-      <div className="control-panel">
-        <div className="panel-section">
-          <div className="panel-title">Ảnh Thẻ Thông Minh</div>
-          <p className="hint-text" style={{ marginBottom: '14px' }}>
-            Biến selfie thành ảnh thẻ chuẩn quốc tế trong vài giây
-          </p>
-          <ImageUploader onUpload={handleImageUpload} uploaded={uploaded} hint="JPG, PNG — ảnh chân dung rõ mặt (tối đa 10MB)" onError={setError} />
+    <div className="id-photo-wrapper">
+      {/* Tab chuyển đổi Đơn Lẻ ⇄ Hàng Loạt */}
+      <div className="history-filter-bar" style={{ marginBottom: 16 }}>
+        <button
+          type="button"
+          className={'history-filter-btn' + (generatorMode === 'single' ? ' active' : '')}
+          onClick={() => setGeneratorMode('single')}
+        >
+          👤 Tạo Đơn Lẻ (1 Ảnh)
+        </button>
+        <button
+          type="button"
+          className={'history-filter-btn' + (generatorMode === 'batch' ? ' active' : '')}
+          onClick={() => setGeneratorMode('batch')}
+        >
+          👥 Xử Lý Hàng Loạt (Batch Mode)
+        </button>
+      </div>
+
+      {generatorMode === 'batch' ? (
+        <BatchIdPhotoGenerator models={models} onSendToLayout={onSendToLayout} />
+      ) : (
+        <div className="split-layout module-enter smooth-layout">
+          <div className="control-panel">
+            <div className="panel-section">
+              <div className="panel-title">Ảnh Thẻ Thông Minh</div>
+              <p className="hint-text" style={{ marginBottom: '14px' }}>
+                Biến selfie thành ảnh thẻ chuẩn quốc tế trong vài giây
+              </p>
+              <ImageUploader onUpload={handleImageUpload} uploaded={uploaded} hint="JPG, PNG — ảnh chân dung rõ mặt (tối đa 10MB)" onError={setError} />
+
+              {uploaded && (
+                <div style={{ marginTop: 8 }}>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => setCropTarget('uploaded')}
+                    style={{ width: '100%', fontSize: 13, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
+                  >
+                    📐 Canh Thước & Crop Ảnh Gốc
+                  </button>
+                </div>
+              )}
 
           {analyzingImage && (
             <div className="smart-analysis-card analyzing">
@@ -641,6 +680,14 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
                 </button>
                 <button
                   type="button"
+                  className="btn-secondary"
+                  onClick={() => setCropTarget('result')}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                >
+                  📐 Canh Thước & Crop Lại
+                </button>
+                <button
+                  type="button"
                   className="btn-layout-strong"
                   onClick={() => onSendToLayout?.({
                     url: result,
@@ -716,8 +763,26 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
               </div>
             </div>
           )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {cropTarget && (
+        <CropModal
+          imageUrl={cropTarget === 'uploaded' ? uploaded?.url : result}
+          initialRatio={size.id === '3x4' ? '3:4' : size.id === '2x3' ? '2:3' : size.id === '3.5x4.5' ? '3.5:4.5' : size.id === '1x1' ? '1:1' : '4:6'}
+          onConfirm={(croppedUrl) => {
+            if (cropTarget === 'uploaded') {
+              setUploaded((prev) => ({ ...prev, url: croppedUrl, base64: croppedUrl }));
+            } else if (cropTarget === 'result') {
+              setResult(croppedUrl);
+            }
+            setCropTarget(null);
+          }}
+          onCancel={() => setCropTarget(null)}
+        />
+      )}
     </div>
   );
 };

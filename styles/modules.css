@@ -1032,3 +1032,14 @@
   color: var(--text-dim);
   text-align: center;
 }
+
+/* === SMART CROP & BATCH GENERATOR === */
+.crop-modal-card {
+  max-width: 680px !important;
+}
+.batch-generator-view {
+  animation: fadeIn 0.25s ease;
+}
+.id-photo-wrapper {
+  animation: fadeIn 0.2s ease;
+}
