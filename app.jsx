@@ -699,7 +699,7 @@ function App() {
           />
         </section>
         <section style={{ display: activeTab === 'restorer' ? 'block' : 'none' }} aria-hidden={activeTab !== 'restorer'}>
-          <PhotoRestorer models={apiModels} loadingModels={loadingModels} modelError={modelError} />
+          <PhotoRestorer models={apiModels} loadingModels={loadingModels} modelError={modelError} onSendToLayout={sendPhotoToLayout} />
         </section>
         <section style={{ display: activeTab === 'layout' ? 'block' : 'none' }} aria-hidden={activeTab !== 'layout'}>
           <ProfessionalLayout incomingPhoto={layoutSeed} />

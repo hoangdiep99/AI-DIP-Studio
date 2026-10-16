@@ -12,7 +12,7 @@ import ComparisonSlider from './ComparisonSlider.jsx';
 import ModelPicker from './ModelPicker.jsx';
 import AccordionSection from './AccordionSection.jsx';
 
-const PhotoRestorer = ({ models = [], loadingModels, modelError = '' }) => {
+const PhotoRestorer = ({ models = [], loadingModels, modelError = '', onSendToLayout }) => {
   // Mặc định ưu tiên "Nano Banana 2" + resolution 1K + mode VIP 2 — theo phản hồi
   // thực tế của người dùng là cấu hình tạo ảnh nhanh nhất khi mới mở app.
   const defaultModel = findPreferredDefaultModel(models);
@@ -270,6 +270,16 @@ const PhotoRestorer = ({ models = [], loadingModels, modelError = '' }) => {
           )}
           {result && !loading && (
             <div className="restore-download-actions">
+              {onSendToLayout && (
+                <button
+                  type="button"
+                  className="btn-primary restore-download-btn"
+                  onClick={() => onSendToLayout(result)}
+                  style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff' }}
+                >
+                  🖨️ Chuyển sang In Ấn
+                </button>
+              )}
               <button type="button" className="btn-secondary restore-download-btn" onClick={() => handleDownload('png')}>
                 ⬇ Tải PNG
               </button>

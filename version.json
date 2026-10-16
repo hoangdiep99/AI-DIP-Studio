@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.2",
+  "latestVersion": "2.1.3",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.1.2 - Tối Ưu Kết Nối Google Gemini API",
-  "changelog": "• TỐI ƯU KẾT NỐI GOOGLE GEMINI API: Chuẩn hóa endpoint xác thực qua danh mục Model quốc tế (/v1beta/models), nhận diện chính xác 100% mọi API Key Google AI Studio.\n• NÂNG CẤP NHẬN DIỆN THỊ GIÁC AI: Cập nhật mô hình Vision sang Gemini 2.5 Flash phân tích khuôn mặt, giới tính và độ tuổi cực nhanh và chuẩn xác.\n• THÔNG BÁO LỖI MINH BẠCH: Bổ sung hướng dẫn chi tiết bằng tiếng Việt khi tài khoản Google đang ở Free tier (chưa mở billing tạo ảnh).\n• KHÓA NÉT MẶT SINH TRẮC HỌC: Giữ trọn 100% ngũ quan, nốt ruồi và sống mũi chuẩn studio.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.2/AI-DIP-Studio-Setup-2.1.2.exe",
+  "title": "AI DIP Studio v2.1.3 - Sửa lỗi tạo ảnh & Liên kết In Ấn Phục Hồi",
+  "changelog": "• SỬA LỖI TẠO ẢNH: Khắc phục triệt để lỗi 'retouchText is not defined' khi bấm nút Tạo Ảnh Thẻ.\n• LIÊN KẾT IN ẤN PHỤC HỒI: Bổ sung nút 'Chuyển sang In Ấn' ngay sau khi phục hồi ảnh cũ để dàn trang 10x15, A4 in lấy liền.\n• TỐI ƯU KẾT NỐI GOOGLE GEMINI: Chuẩn hóa kết nối Google AI Studio, nâng cấp Vision phân tích mặt Gemini 2.5 Flash.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.3/AI-DIP-Studio-Setup-2.1.3.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
