@@ -22,7 +22,7 @@ function createWindow() {
     height: 860,
     minWidth: 960,
     minHeight: 640,
-    title: 'AI DIP Studio v2.0.10',
+    title: 'AI DIP Studio v2.0.11',
     icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     backgroundColor: '#0a0a0f',
     autoHideMenuBar: true,
@@ -179,6 +179,168 @@ ipcMain.handle('install-and-restart', async (_event, filePath) => {
     console.error('Lỗi khởi chạy bộ cài:', err);
     return { success: false, error: err.message };
   }
+});
+
+// === IPC: LƯU & QUẢN LÝ ẢNH LỊCH SỬ DẠNG FILE TRỰC TIẾP TRÊN Ổ CỨNG (%APPDATA%) ===
+function getAppStoragePaths() {
+  const userData = app.getPath('userData');
+  const historyDir = path.join(userData, 'history_photos');
+  const historyJson = path.join(userData, 'history.json');
+  const apiConfigJson = path.join(userData, 'api_config.json');
+  if (!fs.existsSync(historyDir)) {
+    fs.mkdirSync(historyDir, { recursive: true });
+  }
+  return { userData, historyDir, historyJson, apiConfigJson };
+}
+
+ipcMain.handle('save-history-photo', async (_event, item) => {
+  try {
+    if (!item || !item.url) return { success: false, error: 'Thiếu dữ liệu ảnh' };
+    const { historyDir, historyJson } = getAppStoragePaths();
+
+    const timestamp = item.createdAt || Date.now();
+    const baseName = item.fileName ? item.fileName.replace(/\.(png|jpe?g|webp)$/i, '') : `anh-the-ai-${timestamp}`;
+    const safeName = `${baseName.replace(/[\\/:*?"<>|]+/g, '_')}.png`;
+    const targetFilePath = path.join(historyDir, safeName);
+
+    if (typeof item.url === 'string' && item.url.startsWith('data:')) {
+      const base64Data = item.url.replace(/^data:image\/\w+;base64,/, '');
+      fs.writeFileSync(targetFilePath, Buffer.from(base64Data, 'base64'));
+    } else if (typeof item.url === 'string' && item.url.startsWith('http')) {
+      try {
+        const resp = await fetch(item.url);
+        if (resp.ok) {
+          const buffer = Buffer.from(await resp.arrayBuffer());
+          fs.writeFileSync(targetFilePath, buffer);
+        }
+      } catch (fetchErr) {
+        console.warn('Không tải được URL remote về lưu đĩa:', fetchErr.message);
+      }
+    }
+
+    let historyList = [];
+    try {
+      if (fs.existsSync(historyJson)) {
+        historyList = JSON.parse(fs.readFileSync(historyJson, 'utf-8'));
+      }
+    } catch (e) {
+      historyList = [];
+    }
+
+    const fileUrl = `file:///${targetFilePath.replace(/\\/g, '/')}`;
+    const diskItem = {
+      id: item.id || `hist-${timestamp}-${Math.random().toString(36).slice(2, 9)}`,
+      type: item.type || 'other',
+      fileName: safeName,
+      filePath: targetFilePath,
+      url: fs.existsSync(targetFilePath) ? fileUrl : item.url,
+      meta: item.meta || {},
+      createdAt: timestamp,
+    };
+
+    historyList = [diskItem, ...historyList.filter((x) => x.id !== diskItem.id)].slice(0, 100);
+    fs.writeFileSync(historyJson, JSON.stringify(historyList, null, 2), 'utf-8');
+
+    return { success: true, item: diskItem };
+  } catch (err) {
+    console.error('Lỗi lưu ảnh ra ổ cứng:', err);
+    return { success: false, error: err.message };
+  }
+});
+
+ipcMain.handle('get-disk-history', async () => {
+  try {
+    const { historyDir, historyJson } = getAppStoragePaths();
+    if (!fs.existsSync(historyJson)) return [];
+    const content = fs.readFileSync(historyJson, 'utf-8');
+    const list = JSON.parse(content);
+    if (!Array.isArray(list)) return [];
+
+    return list.map((item) => {
+      const p = item.filePath || path.join(historyDir, item.fileName);
+      const exists = fs.existsSync(p);
+      return {
+        ...item,
+        url: exists ? `file:///${p.replace(/\\/g, '/')}` : item.url,
+        exists,
+      };
+    });
+  } catch (err) {
+    console.error('Lỗi đọc lịch sử từ đĩa:', err);
+    return [];
+  }
+});
+
+ipcMain.handle('delete-disk-history-item', async (_event, id) => {
+  try {
+    const { historyJson } = getAppStoragePaths();
+    if (!fs.existsSync(historyJson)) return true;
+    const list = JSON.parse(fs.readFileSync(historyJson, 'utf-8'));
+    const itemToDelete = list.find((x) => x.id === id);
+    if (itemToDelete && itemToDelete.filePath && fs.existsSync(itemToDelete.filePath)) {
+      try { fs.unlinkSync(itemToDelete.filePath); } catch (e) {}
+    }
+    const nextList = list.filter((x) => x.id !== id);
+    fs.writeFileSync(historyJson, JSON.stringify(nextList, null, 2), 'utf-8');
+    return true;
+  } catch (err) {
+    return false;
+  }
+});
+
+ipcMain.handle('clear-disk-history', async (_event, type) => {
+  try {
+    const { historyJson } = getAppStoragePaths();
+    if (!fs.existsSync(historyJson)) return true;
+    const list = JSON.parse(fs.readFileSync(historyJson, 'utf-8'));
+    const toDelete = type && type !== 'all' ? list.filter((x) => x.type === type) : list;
+    toDelete.forEach((it) => {
+      if (it.filePath && fs.existsSync(it.filePath)) {
+        try { fs.unlinkSync(it.filePath); } catch (e) {}
+      }
+    });
+    const remaining = type && type !== 'all' ? list.filter((x) => x.type !== type) : [];
+    fs.writeFileSync(historyJson, JSON.stringify(remaining, null, 2), 'utf-8');
+    return true;
+  } catch (err) {
+    return false;
+  }
+});
+
+ipcMain.handle('open-history-folder', async () => {
+  try {
+    const { historyDir } = getAppStoragePaths();
+    await shell.openPath(historyDir);
+    return { success: true, path: historyDir };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
+
+ipcMain.handle('save-api-config-disk', async (_event, config) => {
+  try {
+    if (!config) return false;
+    const { apiConfigJson } = getAppStoragePaths();
+    fs.writeFileSync(apiConfigJson, JSON.stringify(config, null, 2), 'utf-8');
+    return true;
+  } catch (err) {
+    console.error('Lỗi lưu api_config.json ra đĩa:', err);
+    return false;
+  }
+});
+
+ipcMain.handle('get-api-config-disk', async () => {
+  try {
+    const { apiConfigJson } = getAppStoragePaths();
+    if (!fs.existsSync(apiConfigJson)) return null;
+    return JSON.parse(fs.readFileSync(apiConfigJson, 'utf-8'));
+  } catch (err) {
+    return null;
+  }
+});
+
+ipcMain.handle('get-user-data-path', async () => {
+  return app.getPath('userData');
 });
 
 app.whenReady().then(createWindow);

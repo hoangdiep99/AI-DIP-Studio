@@ -100,16 +100,31 @@ const HistoryGallery = ({ onSendToLayout, refreshToken, active = false }) => {
     }
   };
 
+  const handleOpenFolder = async () => {
+    try {
+      if (window.electronDisk?.openHistoryFolder) {
+        await window.electronDisk.openHistoryFolder();
+      } else {
+        alert('Ảnh được lưu trong thư mục: %APPDATA%\\ai-dip-studio\\history_photos');
+      }
+    } catch (e) {
+      setError(e?.message || 'Không mở được thư mục ảnh.');
+    }
+  };
+
   return (
     <div className="history-page module-enter">
       <div className="history-hero">
         <div>
           <h2>🕘 Lịch Sử Ảnh <span style={{ fontSize: '16px', color: 'var(--text-dim)', fontWeight: 600 }}>({allItems.length} ảnh)</span></h2>
-          <p>Toàn bộ ảnh thẻ và ảnh phục hồi bạn đã tạo được lưu trữ an toàn ngay trên máy tính của bạn — xem lại, tải về và sắp xếp in ấn bất cứ lúc nào mà không cần tạo lại.</p>
+          <p>Toàn bộ ảnh thẻ và ảnh phục hồi bạn đã tạo được lưu trữ an toàn ngay trên máy tính của bạn (%APPDATA%\ai-dip-studio) — xem lại, tải về và mở thư mục bất cứ lúc nào mà không cần tạo lại.</p>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" className="btn-secondary history-refresh-btn" onClick={() => load(true)} disabled={loading || syncing}>
             {syncing ? '🔄 Đang đồng bộ...' : '↻ Đồng bộ / Làm mới'}
+          </button>
+          <button type="button" className="btn-secondary history-open-folder-btn" onClick={handleOpenFolder} title="Mở thư mục chứa file ảnh gốc trong AppData">
+            📂 Mở thư mục ảnh
           </button>
           {allItems.length > 0 && (
             <button type="button" className="btn-secondary history-clear-btn" onClick={handleClearAll}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { gommoApi, getApiConfig, saveApiConfig, toItems } from './lib/api.js';
+import { gommoApi, getApiConfig, saveApiConfig, toItems, initApiConfigFromDisk } from './lib/api.js';
 import { sanitizeImageModelList } from './lib/modelCatalog.js';
 import { validateGeminiKey, validateOpenAiKey, fetchOpenAiModels, fetchOpenAiBalance } from './lib/generate.js';
 import donateQrImage from './assets/qr-donate.jpg';
@@ -76,6 +76,7 @@ function App() {
   };
 
   useEffect(() => {
+    initApiConfigFromDisk();
     // Tự động kiểm tra bản cập nhật mới từ GitHub sau khi mở app 2.5s
     const timer = setTimeout(() => {
       handleCheckUpdate(false);

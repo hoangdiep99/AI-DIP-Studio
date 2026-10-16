@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.10",
+  "latestVersion": "2.0.11",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.10 - Thanh Trượt Căn Chỉnh Vị Trí In Ấn & Tự Động Đồng Bộ Lịch Sử",
-  "changelog": "• BỐ CỤC IN ẤN THÔNG MINH (3x4, 2x3, 3.5x4.5): Bổ sung thanh trượt tùy chỉnh vị trí trên/dưới đồng bộ cho toàn bộ ảnh trên khổ giấy, mặc định giữ trọn vẹn đỉnh đầu và mái tóc như ảnh 4x6, không bao giờ bị cắt tóc.\n• NÚT PRESET CĂN CHỈNH 1-CLICK: Đỉnh đầu cao (0%), Chuẩn thẻ 4x6 (15%), Hạ thấp (30%) cho thao tác nhanh chóng.\n• ĐỒNG BỘ LỊCH SỬ TỨC THÌ: Tab Lịch Sử tự động làm mới ngay khi chuyển tab hoặc khi tạo xong ảnh mới, bổ sung nút '↻ Đồng bộ / Làm mới', hiển thị số lượng ảnh từng danh mục và sao lưu kép IndexedDB + LocalStorage an toàn 100%.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.10/AI-DIP-Studio-Setup-2.0.10.exe",
+  "title": "AI DIP Studio v2.0.11 - Lưu File Ảnh & Cấu Hình API Trực Tiếp Vào %APPDATA%",
+  "changelog": "• LƯU FILE ẢNH THẬT (.PNG) VÀO Ổ CỨNG: Toàn bộ ảnh thẻ và ảnh phục hồi được lưu thành file ảnh thực tế trực tiếp trong thư mục %APPDATA%\\ai-dip-studio\\history_photos.\n• NÚT '📂 MỞ THƯ MỤC ẢNH': 1-click mở ngay thư mục chứa ảnh trên máy tính trong Windows Explorer.\n• LƯU CẤU HÌNH API RA FILE ĐĨA (api_config.json): Lưu trữ Access Token, Gemini Keys và domain trực tiếp vào %APPDATA%\\ai-dip-studio\\api_config.json, không bao giờ bị mất cấu hình khi cập nhật hay cài lại app.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.11/AI-DIP-Studio-Setup-2.0.11.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
