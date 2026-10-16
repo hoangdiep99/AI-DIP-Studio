@@ -1,6 +1,5 @@
 ; Inno Setup script cho AI DIP Studio
-; Đóng gói từ bản đã build sẵn trong release\win-unpacked
-; (né lỗi winCodeSign/symlink của electron-builder NSIS trên máy chưa bật Developer Mode)
+; Tinh gọn tối giản 1-Click - Cài đặt xong tự động mở app ngay lập tức (giống Chép Thẻ Nhanh Pro)
 
 #define MyAppName "AI DIP Studio"
 #define MyAppVersion "2.0.12"
@@ -15,11 +14,15 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
+DisableWelcomePage=yes
+DisableDirPage=yes
 DisableProgramGroupPage=yes
+DisableReadyPage=yes
+DisableFinishedPage=yes
 OutputDir=release\installer
 OutputBaseFilename=AI-DIP-Studio-Setup-{#MyAppVersion}
 SetupIconFile=assets\icon.ico
-Compression=lzma
+Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64
@@ -33,15 +36,12 @@ RestartApplications=no
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-[Tasks]
-Name: "desktopicon"; Description: "Tạo shortcut trên Desktop"; GroupDescription: "Shortcuts:"
-
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "Chạy {#MyAppName} ngay"; Flags: nowait postinstall skipifsilent

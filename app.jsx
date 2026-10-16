@@ -468,17 +468,27 @@ function App() {
     };
   }, []);
 
-  // Cứ mỗi 30 phút sử dụng app hiện popup cảm ơn + nhắc liên hệ hỗ trợ 1 lần.
+  // Cứ mỗi 35 phút (trong khoảng 30-45 phút) sử dụng app hiện popup Tác giả / Cảm ơn 1 lần.
   // Mẹo test nhanh: mở app với URL có thêm ?test_thanks=1 (ví dụ index.html?test_thanks=1)
-  // để popup hiện ngay lập tức, không cần chờ đủ 30 phút.
+  // để popup hiện ngay lập tức, không cần chờ đủ 35 phút.
   useEffect(() => {
-    const THANKS_INTERVAL_MS = 30 * 60 * 1000;
+    const THANKS_INTERVAL_MS = 35 * 60 * 1000;
     const isTestMode = new URLSearchParams(window.location.search).get('test_thanks') === '1';
     if (isTestMode) {
       setShowThanksModal(true);
+    } else {
+      const lastShown = Number(sessionStorage.getItem('aidip_last_thanks_shown') || '0');
+      const now = Date.now();
+      if (!lastShown) {
+        sessionStorage.setItem('aidip_last_thanks_shown', String(now));
+      } else if (now - lastShown >= THANKS_INTERVAL_MS) {
+        setShowThanksModal(true);
+        sessionStorage.setItem('aidip_last_thanks_shown', String(now));
+      }
     }
     const timer = window.setInterval(() => {
       setShowThanksModal(true);
+      sessionStorage.setItem('aidip_last_thanks_shown', String(Date.now()));
     }, THANKS_INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, []);
@@ -715,7 +725,7 @@ function App() {
               <span className="author-contact-kicker">Tác giả</span>
               <strong>AI DIP Studio <span className="version-pill">v{CURRENT_VERSION}</span></strong>
             </div>
-            <p>Hỗ trợ cài đặt Capture One • Haicaoyun • VPN • Google Drive • Cân màu màn hình.</p>
+            <p>Hỗ trợ cài đặt Capture One • MagiMir - Haicaoyun • VPN • Google Drive • Capcut pro • Cân màu màn hình.</p>
           </div>
           <div className="author-contact-actions">
             <a
@@ -948,21 +958,43 @@ function App() {
 
       {showThanksModal && (
         <div className="modal-backdrop" onClick={() => setShowThanksModal(false)}>
-          <div className="config-modal-card thanks-modal" onClick={(event) => event.stopPropagation()}>
+          <div className="config-modal-card thanks-modal" onClick={(event) => event.stopPropagation()} style={{ maxWidth: 440, textAlign: 'center' }}>
             <div className="modal-header">
-              <h3>💛 Cảm ơn bạn</h3>
+              <h3>💛 Tác giả</h3>
               <button className="close-btn" onClick={() => setShowThanksModal(false)}>×</button>
             </div>
-            <div className="modal-body">
-              <p>Cảm ơn bạn đã sử dụng app.</p>
-              <p>Cần hỗ trợ, góp ý hoặc hỗ trợ cài đặt phần mềm Capture One | Haicaoyun | VPN | Google Drive | Cân màu màn hình, liên hệ mình.</p>
-              <div className="modal-actions">
+            <div className="modal-body" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ marginBottom: 12 }}>
+                <h4 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 800, color: '#fff' }}>
+                  AI DIP Studio <span className="version-pill" style={{ verticalAlign: 'middle' }}>v{CURRENT_VERSION}</span>
+                </h4>
+                <p style={{ margin: '4px 0', fontSize: 14, color: 'var(--text, #eee)' }}>
+                  Cần góp ý bạn liên hệ Facebook mình
+                </p>
+                <p style={{ margin: '8px 0 16px', fontSize: 13, color: 'var(--muted, #aaa)', lineHeight: 1.55 }}>
+                  Hỗ trợ cài đặt Capture One • MagiMir - Haicaoyun • VPN • Google Drive • Capcut pro • Cân màu màn hình.
+                </p>
+              </div>
+
+              <div style={{ background: '#ffffff', borderRadius: 12, padding: '12px 16px', marginBottom: 18, boxShadow: '0 4px 16px rgba(0,0,0,0.3)', textAlign: 'center' }}>
+                <img
+                  src={donateQrImage}
+                  alt="QR Gửi cà phê"
+                  style={{ width: 190, height: 190, objectFit: 'contain', display: 'block', borderRadius: 6, margin: '0 auto' }}
+                />
+                <div style={{ color: '#111827', fontWeight: 700, fontSize: 13, marginTop: 8 }}>
+                  ☕ Gửi cà phê ủng hộ tác giả
+                </div>
+              </div>
+
+              <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: 10, width: '100%', marginTop: 0 }}>
                 <a
                   className="btn-submit"
                   href="https://www.facebook.com/diepfoto"
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setShowThanksModal(false)}
+                  style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
                 >
                   💬 Liên hệ Facebook
                 </a>
