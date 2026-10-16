@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.5",
+  "latestVersion": "2.0.6",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.5 - Đồng Bộ Phiên Bản Động & Khắc Phục Hiển Thị Logo",
-  "changelog": "• ĐỒNG BỘ PHIÊN BẢN ĐỘNG: Gắn biến phiên bản firmware động trực tiếp vào thanh tiêu đề Header, phần Tác giả và modal Cấu hình kết nối, chấm dứt hoàn toàn hiện tượng hiển thị lệch bản cũ v2.0.0.\n• KHẮC PHỤC HIỂN THỊ LOGO THƯƠNG HIỆU: Đóng gói và load chính xác file SVG Logo AI DIP Studio qua bundler pipeline, đảm bảo hiển thị sắc nét, không còn lỗi ảnh vỡ.\n• TỰ ĐỘNG TẢI & CÀI ĐẶT 1-CLICK: Tải trực tiếp bản cập nhật ngay bên trong ứng dụng với thanh tiến trình trực quan, sau khi tải xong có nút Cài Đặt & Khởi Động Lại Ngay.\n• BẢNG LỰA CHỌN TRUNG TÂM NỔI BẬT: Bảng trực quan hóa trang phục, kiểu tóc, phông nền, kích thước ngay giữa màn hình làm việc.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.5/AI-DIP-Studio-Setup-2.0.5.exe",
+  "title": "AI DIP Studio v2.0.6 - Khôi Phục Giao Diện Kết Quả Trung Tâm & Khắc Phục Bộ Cài",
+  "changelog": "• KHÔI PHỤC VÙNG KẾT QUẢ TRUNG TÂM: Trả lại toàn bộ không gian làm việc chính cho khu vực Kết quả ảnh thẻ hoàn thiện, loại bỏ hoàn toàn bảng lựa chọn che khuất ở giữa theo đúng yêu cầu.\n• KHẮC PHỤC TRIỆT ĐỂ BỘ CÀI ĐẶT: Sửa lỗi khóa tiến trình Inno Setup khi đang chạy bản cũ, đảm bảo bộ cài v2.0.6 luôn ghi đè và cập nhật chính xác 100% mã nguồn mới nhất vào máy.\n• TỰ ĐỘNG ĐÓNG ỨNG DỤNG CŨ KHI CÀI ĐẶT: Bộ cài Inno Setup được trang bị cơ chế CloseApplications=yes giúp tự đóng phiên bản cũ để thay thế file sạch sẽ.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.6/AI-DIP-Studio-Setup-2.0.6.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

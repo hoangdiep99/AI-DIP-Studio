@@ -3,7 +3,7 @@
 ; (né lỗi winCodeSign/symlink của electron-builder NSIS trên máy chưa bật Developer Mode)
 
 #define MyAppName "AI DIP Studio"
-#define MyAppVersion "2.0.5"
+#define MyAppVersion "2.0.6"
 #define MyAppPublisher "Diep Foto"
 #define MyAppExeName "AI DIP Studio.exe"
 #define SourceDir "release\win-unpacked"
@@ -26,6 +26,9 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
+CloseApplications=yes
+CloseApplicationsFilter=*.exe
+RestartApplications=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

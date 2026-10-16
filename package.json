@@ -1,7 +1,7 @@
 {
   "name": "ai-dip-studio",
   "private": true,
-  "version": "2.0.5",
+  "version": "2.0.6",
   "main": "electron/main.js",
   "type": "module",
   "scripts": {
@@ -9,8 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "electron": "electron .",
-    "electron:dist": "set CSC_IDENTITY_AUTO_DISCOVERY=false&& npm run build && set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder --win --dir",
-    "electron:installer": "(npm run electron:dist & \"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe\" installer.iss)"
+    "electron:dist": "(taskkill /F /IM \"AI DIP Studio.exe\" /T 2>nul || cd .) && set CSC_IDENTITY_AUTO_DISCOVERY=false&& npm run build && set CSC_IDENTITY_AUTO_DISCOVERY=false&& electron-builder --win --dir",
+    "electron:installer": "npm run electron:dist && \"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe\" installer.iss"
   },
   "dependencies": {
     "express": "^4.21.2",
