@@ -6,7 +6,7 @@ import { buildIdPhotoPrompt } from '../lib/promptBuilder.js';
 import { getDefaultMediaSettings, getMediaOptionsFromSource, findPreferredDefaultModel, PREFERRED_ID_PHOTO_SETTINGS } from '../lib/modelCatalog.js';
 
 import { addHistoryItem } from '../lib/history.js';
-import { analyzeImageWithAI } from '../lib/visionAnalysis.js';
+import { analyzeImageWithAI, buildSmartSuggestions } from '../lib/visionAnalysis.js';
 import ImageUploader from './ImageUploader.jsx';
 import ModelPicker from './ModelPicker.jsx';
 import { OutfitVisual, HairVisual } from './StudioVisualIcons.jsx';
@@ -180,6 +180,26 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
       setSelectedBeauty(analysis.suggestedBeautyIds);
     }
   }, []);
+
+  const handleToggleGender = React.useCallback(() => {
+    if (!smartAnalysis) return;
+    const nextGenderId = smartAnalysis.gender === 'female' ? 'male' : 'female';
+    const newSuggestions = buildSmartSuggestions({
+      gender: nextGenderId,
+      age: smartAnalysis.age,
+      hasGlasses: smartAnalysis.hasGlasses
+    });
+    const updatedAnalysis = {
+      ...smartAnalysis,
+      gender: nextGenderId,
+      genderLabel: nextGenderId === 'female' ? 'Nữ' : 'Nam',
+      genderEmoji: nextGenderId === 'female' ? '👩' : '👨',
+      detectedHair: nextGenderId === 'female' ? 'Tóc dài buông vai' : 'Tóc nam tự nhiên',
+      ...newSuggestions
+    };
+    setSmartAnalysis(updatedAnalysis);
+    applySmartSuggestions(updatedAnalysis);
+  }, [smartAnalysis, applySmartSuggestions]);
 
   const handleImageUpload = React.useCallback(async (uploadData) => {
     setUploaded(uploadData);
@@ -358,9 +378,15 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
                 <span className="analysis-confidence">Độ chính xác: {smartAnalysis.confidence}%</span>
               </div>
               <div className="analysis-pill-row">
-                <span className="analysis-pill">
+                <button
+                  type="button"
+                  className="analysis-pill interactive-gender-pill"
+                  onClick={handleToggleGender}
+                  title="Nhấp để đổi nhanh giới tính Nam ⇄ Nữ"
+                >
                   {smartAnalysis.genderEmoji} <strong>{smartAnalysis.genderLabel}</strong>
-                </span>
+                  <span className="pill-action-badge">⇄ Đổi</span>
+                </button>
                 <span className="analysis-pill">
                   🎂 <strong>~{smartAnalysis.age} tuổi</strong> ({smartAnalysis.ageGroupLabel})
                 </span>

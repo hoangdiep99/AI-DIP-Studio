@@ -3,7 +3,7 @@
 ; (né lỗi winCodeSign/symlink của electron-builder NSIS trên máy chưa bật Developer Mode)
 
 #define MyAppName "AI DIP Studio"
-#define MyAppVersion "2.0.1"
+#define MyAppVersion "2.0.2"
 #define MyAppPublisher "Diep Foto"
 #define MyAppExeName "AI DIP Studio.exe"
 #define SourceDir "release\win-unpacked"
