@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.3",
+  "latestVersion": "2.1.4",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.1.3 - Sửa lỗi tạo ảnh & Liên kết In Ấn Phục Hồi",
-  "changelog": "• SỬA LỖI TẠO ẢNH: Khắc phục triệt để lỗi 'retouchText is not defined' khi bấm nút Tạo Ảnh Thẻ.\n• LIÊN KẾT IN ẤN PHỤC HỒI: Bổ sung nút 'Chuyển sang In Ấn' ngay sau khi phục hồi ảnh cũ để dàn trang 10x15, A4 in lấy liền.\n• TỐI ƯU KẾT NỐI GOOGLE GEMINI: Chuẩn hóa kết nối Google AI Studio, nâng cấp Vision phân tích mặt Gemini 2.5 Flash.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.3/AI-DIP-Studio-Setup-2.1.3.exe",
+  "title": "AI DIP Studio v2.1.4 - Tách Riêng Trang Phục Nam/Nữ & Sửa Dropdown",
+  "changelog": "• SỬA LỖI DROPDOWN HÀNG LOẠT: Sửa triệt để lỗi không hiển thị chữ ở mục Trang phục và Phông nền trong Xử Lý Hàng Loạt.\n• TÁCH BIỆT TRANG PHỤC NAM & NỮ: Phân chia rõ ràng danh mục Trang phục Nam, Trang phục Nữ và Trang phục Chung ở cả 2 chế độ.\n• LƯỢC BỎ QUÂN PHỤC: Loại bỏ hoàn toàn trang phục công an, quân đội theo quy định và yêu cầu studio.\n• TỐI ƯU NHẬN DIỆN THỊ GIÁC: Tinh chỉnh thuật toán nhận diện giới tính không bị nhầm lẫn khi nam giới mặc áo tối màu hoặc phanh ngực.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.4/AI-DIP-Studio-Setup-2.1.4.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

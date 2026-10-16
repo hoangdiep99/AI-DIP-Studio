@@ -232,11 +232,27 @@ const BatchIdPhotoGenerator = ({ models = [], onSendToLayout }) => {
               disabled={isRunning}
               style={{ width: '100%', padding: '8px 10px', borderRadius: 8, background: 'var(--bg-elevated)', color: 'var(--text)', border: '1px solid var(--border)' }}
             >
-              {config.outfits.map((o) => (
-                <option key={o.id} value={o.id}>
-                  {o.name}
-                </option>
-              ))}
+              <optgroup label="👨 TRANG PHỤC NAM">
+                {config.outfits.filter((o) => o.category === 'male').map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.emoji} {o.label} ({o.desc})
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="👩 TRANG PHỤC NỮ">
+                {config.outfits.filter((o) => o.category === 'female').map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.emoji} {o.label} ({o.desc})
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="👔 TRANG PHỤC CHUNG / HỌC ĐƯỜNG">
+                {config.outfits.filter((o) => o.category === 'unisex').map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.emoji} {o.label} ({o.desc})
+                  </option>
+                ))}
+              </optgroup>
             </select>
           </div>
 
@@ -253,7 +269,7 @@ const BatchIdPhotoGenerator = ({ models = [], onSendToLayout }) => {
             >
               {config.backgrounds.map((b) => (
                 <option key={b.id} value={b.id}>
-                  {b.name}
+                  {b.label} ({b.desc})
                 </option>
               ))}
             </select>

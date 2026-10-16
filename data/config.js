@@ -12,18 +12,23 @@ export default {
     { id: 'gray', label: 'Xám Studio', color: '#7a7a7a', desc: 'Thanh lịch' },
   ],
   outfits: [
-    { id: 'vest-nam', label: 'Vest Nam', emoji: '🤵', desc: 'Công sở lịch sự', prompt: 'wearing a formal dark male business suit with necktie' },
-    { id: 'vest-nu', label: 'Vest Nữ', emoji: '👩‍💼', desc: 'Chuyên nghiệp', prompt: 'wearing a professional women business blazer suit' },
-    { id: 'somi-trang', label: 'Sơ Mi Trắng', emoji: '👔', desc: 'Trang nhã', prompt: 'wearing a clean white dress shirt' },
-    { id: 'aodai-trang', label: 'Áo Dài Trắng', emoji: '🤍', desc: 'Nữ sinh / công sở', prompt: 'wearing elegant pure white Vietnamese Ao Dai' },
-    { id: 'aodai-do', label: 'Áo Dài Đỏ', emoji: '❤️', desc: 'Nổi bật', prompt: 'wearing elegant red Vietnamese Ao Dai' },
-    { id: 'aodai-xanh', label: 'Áo Dài Xanh', emoji: '💙', desc: 'Thanh lịch', prompt: 'wearing elegant blue Vietnamese Ao Dai' },
-    { id: 'uniform', label: 'Đồng Phục', emoji: '🎓', desc: 'Học sinh', prompt: 'wearing a neat school uniform' },
-    { id: 'police', label: 'Công An', emoji: '🛡️', desc: 'Hồ sơ ngành', prompt: 'wearing a neat Vietnamese police style formal uniform, respectful and official' },
-    { id: 'army', label: 'Quân Đội', emoji: '🎖️', desc: 'Trang nghiêm', prompt: 'wearing a neat Vietnamese military style formal uniform, respectful and official' },
-    { id: 'doctor', label: 'Bác Sĩ', emoji: '🥼', desc: 'Áo blouse', prompt: 'wearing a clean white doctor coat over formal shirt' },
-    { id: 'graduation', label: 'Tốt Nghiệp', emoji: '🎓', desc: 'Áo cử nhân', prompt: 'wearing a formal graduation gown, neat academic portrait style' },
-    { id: 'casual', label: 'Thường phục', emoji: '👕', desc: 'Đơn giản', prompt: 'wearing neat modest casual clothing suitable for ID photo' },
+    // Trang phục Nam
+    { id: 'vest-nam', label: 'Vest Nam', emoji: '🤵', category: 'male', desc: 'Công sở lịch sự', prompt: 'wearing a formal dark male business suit with necktie' },
+    { id: 'somi-nam', label: 'Sơ Mi Nam', emoji: '👔', category: 'male', desc: 'Trang nhã', prompt: 'wearing a clean white male dress shirt with neat collar' },
+
+    // Trang phục Nữ
+    { id: 'vest-nu', label: 'Vest Nữ', emoji: '👩‍💼', category: 'female', desc: 'Chuyên nghiệp', prompt: 'wearing a professional women business blazer suit' },
+    { id: 'somi-nu', label: 'Sơ Mi Nữ', emoji: '👚', category: 'female', desc: 'Dịu dàng lịch sự', prompt: 'wearing a clean white female blouse dress shirt with neat collar' },
+    { id: 'aodai-trang', label: 'Áo Dài Trắng', emoji: '🤍', category: 'female', desc: 'Nữ sinh / công sở', prompt: 'wearing elegant pure white Vietnamese Ao Dai' },
+    { id: 'aodai-do', label: 'Áo Dài Đỏ', emoji: '❤️', category: 'female', desc: 'Nổi bật trang trọng', prompt: 'wearing elegant red Vietnamese Ao Dai' },
+    { id: 'aodai-xanh', label: 'Áo Dài Xanh', emoji: '💙', category: 'female', desc: 'Thanh lịch', prompt: 'wearing elegant blue Vietnamese Ao Dai' },
+
+    // Trang phục Chung / Học đường
+    { id: 'somi-trang', label: 'Sơ Mi Trắng', emoji: '👔', category: 'unisex', desc: 'Tiêu chuẩn', prompt: 'wearing a clean white dress shirt' },
+    { id: 'uniform', label: 'Đồng Phục', emoji: '🎓', category: 'unisex', desc: 'Học sinh', prompt: 'wearing a neat school uniform' },
+    { id: 'doctor', label: 'Bác Sĩ', emoji: '🥼', category: 'unisex', desc: 'Áo blouse', prompt: 'wearing a clean white doctor coat over formal shirt' },
+    { id: 'graduation', label: 'Tốt Nghiệp', emoji: '🎓', category: 'unisex', desc: 'Áo cử nhân', prompt: 'wearing a formal graduation gown, neat academic portrait style' },
+    { id: 'casual', label: 'Thường phục', emoji: '👕', category: 'unisex', desc: 'Đơn giản', prompt: 'wearing neat modest casual clothing suitable for ID photo' },
   ],
   genders: [
     { id: 'male', label: 'Nam', icon: '👨', prompt: 'male subject' },

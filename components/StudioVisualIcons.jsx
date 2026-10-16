@@ -7,6 +7,8 @@ import React from 'react';
 
 export const OutfitVisual = ({ id, className = '' }) => {
   switch (id) {
+    case 'somi-nam':
+    case 'somi-nu':
     case 'somi-trang':
       return (
         <svg className={`visual-icon outfit-icon ${className}`} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

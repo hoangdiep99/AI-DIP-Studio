@@ -586,8 +586,40 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
           openSections={openSections}
           onToggle={toggleSection}
         >
+          {/* Nhóm Nam */}
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#60a5fa', margin: '4px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>👨</span> Trang phục Nam
+          </div>
+          <div className="option-grid outfit-grid visual-grid" style={{ marginBottom: 16 }}>
+            {config.outfits.filter(o => o.category === 'male').map(o => (
+              <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
+                <OutfitVisual id={o.id} />
+                <div className="oc-label">{o.label}</div>
+                <div className="oc-desc">{o.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Nhóm Nữ */}
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#f472b6', margin: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>👩</span> Trang phục Nữ
+          </div>
+          <div className="option-grid outfit-grid visual-grid" style={{ marginBottom: 16 }}>
+            {config.outfits.filter(o => o.category === 'female').map(o => (
+              <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
+                <OutfitVisual id={o.id} />
+                <div className="oc-label">{o.label}</div>
+                <div className="oc-desc">{o.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Nhóm Chung / Học đường */}
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-dim, #94a3b8)', margin: '12px 0 8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span>👔</span> Trang phục Chung / Học đường
+          </div>
           <div className="option-grid outfit-grid visual-grid">
-            {config.outfits.map(o => (
+            {config.outfits.filter(o => o.category === 'unisex').map(o => (
               <div key={o.id} className={"option-card visual-card" + (outfit.id === o.id ? " selected" : "")} onClick={() => setOutfit(o)}>
                 <OutfitVisual id={o.id} />
                 <div className="oc-label">{o.label}</div>
