@@ -9,6 +9,7 @@ import { addHistoryItem } from '../lib/history.js';
 import { analyzeImageWithAI, buildSmartSuggestions } from '../lib/visionAnalysis.js';
 import ImageUploader from './ImageUploader.jsx';
 import ModelPicker from './ModelPicker.jsx';
+import CenterStageSelector from './CenterStageSelector.jsx';
 import { OutfitVisual, HairVisual } from './StudioVisualIcons.jsx';
 
 
@@ -35,6 +36,16 @@ const formatDuration = (ms) => {
   const seconds = totalSeconds % 60;
   if (minutes <= 0) return `${seconds}s`;
   return `${minutes}m ${String(seconds).padStart(2, '0')}s`;
+};
+
+const SECTION_LABELS = {
+  outfit: 'Trang phục',
+  hair: 'Kiểu tóc',
+  background: 'Phông nền',
+  size: 'Kích thước',
+  gender: 'Giới tính',
+  beauty: 'Làm đẹp',
+  model: 'Model AI',
 };
 
 const AccordionSection = ({ id, icon, title, summary, openSections, onToggle, children }) => {
@@ -130,12 +141,16 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
     hair: false,
     beauty: false,
   });
+  const [activeSection, setActiveSection] = React.useState('outfit');
+  const [centerView, setCenterView] = React.useState('selector');
   const timerRef = React.useRef(null);
   const abortControllerRef = React.useRef(null);
   const generationIdRef = React.useRef(0);
 
   const toggleSection = React.useCallback((id) => {
     setOpenSections((prev) => ({ ...prev, [id]: !prev[id] }));
+    setActiveSection(id);
+    setCenterView('selector');
   }, []);
 
   React.useEffect(() => {
@@ -277,6 +292,7 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
       if (controller.signal.aborted || generationId !== generationIdRef.current) return;
       const durationMs = performance.now() - startedAt;
       setResult(resUrl);
+      setCenterView('result');
       const meta = {
         durationMs,
         modelName: getModelLabel(currentModel),
@@ -602,9 +618,32 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
 
       <div className="workspace" style={{ position: 'relative' }}>
         <div className="ws-toolbar">
-          <h3>Kết Quả</h3>
+          <div className="ws-toolbar-left">
+            <h3>{result && centerView === 'result' ? 'Ảnh Thẻ Hoàn Thiện' : `Bảng Lựa Chọn: ${SECTION_LABELS[activeSection] || 'Studio'}`}</h3>
+            {uploaded && <span className="ws-photo-loaded-tag">✓ Ảnh chân dung sẵn sàng</span>}
+          </div>
+          <div className="ws-toolbar-actions">
+            {result && (
+              <div className="ws-view-switcher">
+                <button
+                  type="button"
+                  className={`view-toggle-btn ${centerView === 'result' ? 'active' : ''}`}
+                  onClick={() => setCenterView('result')}
+                >
+                  🪪 Ảnh Kết Quả
+                </button>
+                <button
+                  type="button"
+                  className={`view-toggle-btn ${centerView === 'selector' ? 'active' : ''}`}
+                  onClick={() => setCenterView('selector')}
+                >
+                  🎛️ Bảng Lựa Chọn ({SECTION_LABELS[activeSection] || 'Studio'})
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="ws-content">
+        <div className={`ws-content ${(!result || centerView === 'selector') ? 'has-stage' : ''}`}>
           {loading && (
             <div className="loading-overlay">
               <div className="spinner"></div>
@@ -615,13 +654,43 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
               </button>
             </div>
           )}
-          {!result && !loading && (
-            <div className="ws-empty">
-              <div className="ws-empty-icon">🪪</div>
-              <p>Tải ảnh lên và nhấn "Tạo Ảnh Thẻ" để xem kết quả</p>
-            </div>
+
+          {(!result || centerView === 'selector') && !loading && (
+            <CenterStageSelector
+              activeSection={activeSection}
+              onSelectSection={(secId) => {
+                setActiveSection(secId);
+                setOpenSections((prev) => ({ ...prev, [secId]: true }));
+              }}
+              models={models}
+              loadingModels={loadingModels}
+              modelError={modelError}
+              selectedModel={selectedModel || defaultModel}
+              defaultModel={defaultModel}
+              modelSettings={modelSettings}
+              handleModelChange={handleModelChange}
+              setModelSettings={setModelSettings}
+              bg={bg}
+              setBg={setBg}
+              customBgColor={customBgColor}
+              setCustomBgColor={setCustomBgColor}
+              size={size}
+              handleSizeChange={handleSizeChange}
+              gender={gender}
+              handleGenderSelect={handleGenderSelect}
+              outfit={outfit}
+              setOutfit={setOutfit}
+              hairStyle={hairStyle}
+              setHairStyle={setHairStyle}
+              hairChoices={hairChoices}
+              selectedBeauty={selectedBeauty}
+              toggleBeauty={toggleBeauty}
+              retouch={retouch}
+              setRetouch={setRetouch}
+            />
           )}
-          {result && !loading && uploaded && (
+
+          {result && centerView === 'result' && !loading && uploaded && (
             <div className="result-display">
               <ComparisonSlider before={uploaded.url} after={result} beforeLabel="Gốc" afterLabel="Ảnh thẻ" />
               {resultMeta && (
@@ -653,7 +722,7 @@ const IdPhotoGenerator = ({ models = [], loadingModels, modelError = '', onSendT
               </div>
             </div>
           )}
-          {result && !loading && !uploaded && (
+          {result && centerView === 'result' && !loading && !uploaded && (
             <div className="result-image-wrapper">
               <img src={result} alt="Result" />
             </div>

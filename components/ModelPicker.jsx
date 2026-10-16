@@ -148,6 +148,7 @@ const ModelPicker = ({
   onModelChange,
   onSettingsChange,
   embedded = false,
+  hideRatio = false,
 }) => {
   const displayModels = React.useMemo(() => getRecommendedImageModels(models), [models]);
   const optimalInfo = React.useMemo(() => findOptimalIdPhotoModel(models), [models]);
@@ -274,12 +275,12 @@ const ModelPicker = ({
 
       {currentModel && (
         <div className="model-options">
-          {opts.ratios.length > 0 && (
+          {!hideRatio && !embedded && opts.ratios.length > 0 && (
             <OptionSelect
               label="Tỷ lệ ảnh"
               settingKey="ratio"
               value={activeSettings.ratio || ''}
-              options={opts.ratios}
+              options={opts.ratios.filter(r => ['auto', '3:4', '2:3', '9:16', '1:1', '4:5'].includes(String(r.type || '').trim()))}
               onChange={updateSetting}
             />
           )}

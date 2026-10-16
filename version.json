@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.0.2",
+  "latestVersion": "2.0.3",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.0.2 - Nâng Cấp Nhận Diện Giới Tính & Nút Đổi Nhanh Nam/Nữ",
-  "changelog": "• NÂNG CẤP THUẬT TOÁN NHẬN DIỆN GIỚI TÍNH: Tích hợp 5 cảm biến thị giác máy tính cục bộ (Định vị mặt thông minh theo mật độ da, phát hiện tóc dài buông qua cằm/vai, son môi đỏ/hồng, cổ rộng hở vai, bóng râu mép) giúp nhận diện chuẩn xác 100% các bức ảnh chân dung nữ/nam.\n• NÚT CHUYỂN ĐỔI NHANH GIỚI TÍNH: Nhấp trực tiếp vào huy hiệu giới tính [👩 Nữ ⇄ Đổi] / [👨 Nam ⇄ Đổi] trên thẻ gợi ý để đảo chiều toàn bộ cấu hình Studio chỉ với 1 click.\n• SỬA LỖI NHÓM TUỔI: Khắc phục lỗi so sánh nhóm tuổi khiến gợi ý luôn hiển thị của 'Người lớn tuổi', trả về đúng trang phục Vest nữ / Nam thanh niên công sở.\n• TỐI ƯU TỐC ĐỘ TẠO ẢNH: Nhận ảnh thẻ chỉ sau ~10 - 15 giây với tỉ lệ 4x6 cm chuẩn.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.2/AI-DIP-Studio-Setup-2.0.2.exe",
+  "title": "AI DIP Studio v2.0.3 - Bảng Lựa Chọn Nổi Bật Vùng Trung Tâm & Tối Ưu Tỉ Lệ",
+  "changelog": "• BẢNG LỰA CHỌN NỔI BẬT VÙNG TRUNG TÂM: Mở rộng các mục (Trang phục, Kiểu tóc, Phông nền, Kích thước, Giới tính, Làm đẹp, Model AI) sẽ hiển thị bảng chọn nổi bật kích thước lớn ngay giữa vùng trung tâm với icon đồ họa trực quan và đồng bộ tức thì.\n• ẨN BỎ TỈ LỆ RƯỜM RÀ: Tối giản lựa chọn Model AI, loại bỏ danh sách 11 tỷ lệ thừa để tự động áp dụng chính xác tỷ lệ ảnh thẻ dọc chuẩn theo mục Kích thước (4x6 cm, 3x4 cm...).\n• CHUYỂN ĐỔI LINH HOẠT: Thanh tab chuyển đổi nhanh giữa Ảnh Kết Quả và Bảng Lựa Chọn Studio.\n• TỐI ƯU GIAO DIỆN & HIỆU NĂNG: Khởi động tức thì, thao tác mượt mà không độ trễ.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.0.3/AI-DIP-Studio-Setup-2.0.3.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
