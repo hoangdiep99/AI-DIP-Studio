@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.0",
+  "latestVersion": "2.1.1",
   "releaseDate": "16/10/2026",
-  "title": "AI DIP Studio v2.1.0 - Khung Canh Thước Crop Studio & Xử Lý Ảnh Hàng Loạt",
-  "changelog": "• KHUNG CANH THƯỚC STUDIO: Canh chỉnh tỉ lệ chuẩn quốc tế với các đường gióng Đỉnh đầu (12%), Trục mắt (42%), Cằm (72%) và Trục giữa đối xứng. Hỗ trợ xoay nắn góc nghiêng, zoom và pan trực quan.\n• XỬ LÝ ẢNH HÀNG LOẠT (BATCH MODE): Kéo thả nhiều ảnh cùng lúc, cấu hình đồng bộ trang phục/phông nền, tự động tạo ảnh hàng loạt theo hàng đợi và tải về dễ dàng.\n• BỘ CÀI ĐẶT 1-CLICK TỐI GIẢN: Cài đặt cực nhanh, tự tạo shortcut Desktop và tự động mở app ngay sau khi cài (chuẩn trải nghiệm Chép Thẻ Nhanh Pro).\n• POPUP TÁC GIẢ & QR GỬI CÀ PHÊ: Cập nhật định kỳ 35 phút kèm QR donate gửi cà phê tiện lợi.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.0/AI-DIP-Studio-Setup-2.1.0.exe",
+  "title": "AI DIP Studio v2.1.1 - Nâng Cấp Khóa Nét Mặt Sinh Trắc Học",
+  "changelog": "• KHÓA NÉT MẶT SINH TRẮC HỌC: Nâng cấp thuật toán Prompt bảo toàn 100% ngũ quan (mắt 1/2 mí, sống mũi, dáng cằm/hàm, nốt ruồi đặc trưng), tuyệt đối không bị lệch mặt hay vẽ sang người khác.\n• KHUNG CANH THƯỚC STUDIO: Canh chỉnh tỉ lệ chuẩn quốc tế với các đường gióng Đỉnh đầu, Trục mắt, Cằm và Trục giữa đối xứng.\n• XỬ LÝ ẢNH HÀNG LOẠT (BATCH MODE): Kéo thả nhiều ảnh cùng lúc, tạo ảnh đồng bộ theo hàng đợi.\n• BỘ CÀI ĐẶT 1-CLICK TỐI GIẢN: Cài đặt cực nhanh, tự tạo shortcut Desktop và tự động mở app ngay sau khi cài.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.1/AI-DIP-Studio-Setup-2.1.1.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
