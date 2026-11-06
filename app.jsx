@@ -349,6 +349,7 @@ function App() {
     }
 
     const attempts = [
+      { endpoint: '/me', method: 'POST', body: {} },
       { endpoint: '/api/apps/go-mmo/ai/me', method: 'POST', body: {} },
       { endpoint: '/api/apps/go-mmo/ai/me', method: 'GET', body: {} }
     ];
@@ -408,6 +409,7 @@ function App() {
       }
 
       const candidateEndpoints = [
+        '/models',
         '/ai/models',
         '/api/apps/go-mmo/ai/models',
         '/api/apps/go-mmo/models',
@@ -501,7 +503,7 @@ function App() {
     setShowConfigModal(true);
   };
 
-  const PRICING_URL = 'https://aivideoauto.com/prices';
+  const PRICING_URL = 'https://omnivi.ai/vi/prices';
 
   const openPricingPage = () => {
     window.open(PRICING_URL, '_blank', 'noopener,noreferrer');
@@ -550,11 +552,11 @@ function App() {
         await window.gommoMiniApp.call('auth.login', {});
       } else {
         // Fallback: open hosted login page
-        window.open('https://aivideoauto.com/login', '_blank', 'noopener,noreferrer');
+        window.open('https://omnivi.ai/vi/login', '_blank', 'noopener,noreferrer');
       }
     } catch (err) {
       console.warn('Login bridge chưa hỗ trợ hoặc lỗi khi đăng nhập:', err);
-      window.open('https://aivideoauto.com/login', '_blank', 'noopener,noreferrer');
+      window.open('https://omnivi.ai/vi/login', '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -838,11 +840,11 @@ function App() {
                 <p>Bấm nút bên dưới để mở trang bảng giá/nạp Credits chính thức của AI VIDEO AUTO.</p>
                 <div className="pricing-card">
                   <span>Trang nạp chính thức</span>
-                  <strong>aivideoauto.com/prices</strong>
+                  <strong>omnivi.ai/vi/prices</strong>
                 </div>
                 <div className="payment-actions">
                   <button type="button" className="btn-submit" onClick={openPricingPage}>🚀 Mở trang nạp Credits</button>
-                  <a className="btn-secondary" href="https://aivideoauto.com/prices" target="_blank" rel="noreferrer">Mở tab mới</a>
+                  <a className="btn-secondary" href="https://omnivi.ai/vi/prices" target="_blank" rel="noreferrer">Mở tab mới</a>
                 </div>
               </div>
             </div>
@@ -873,7 +875,7 @@ function App() {
                     />
                     <div>
                       <strong>API hệ thống AI VIDEO AUTO (Khuyên dùng - Mặc định)</strong>
-                      <div style={{ fontSize: 12, color: 'var(--muted, #bbb)' }}>Kết nối chính qua https://aivideoauto.com / https://api.gommo.net.</div>
+                      <div style={{ fontSize: 12, color: 'var(--muted, #bbb)' }}>Kết nối chính qua https://omnivi.ai/api/v2 (OmniVi.AI).</div>
                     </div>
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -920,13 +922,13 @@ function App() {
                   <div className="form-group">
                     <label htmlFor="access_token">Access Token:</label>
                     <input id="access_token" type="password" placeholder="Access Token" value={apiConfig.accessToken || ''} onChange={(event) => setApiConfigState({ ...apiConfig, accessToken: event.target.value })} />
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>Nhập Access Token đã tạo từ trang aivideoauto.com/settings/tokens.</div>
+                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>Nhập Access Token đã tạo từ trang omnivi.ai/vi/account (mục API).</div>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="domain">Domain kết nối (Mặc định: aivideoauto.com):</label>
-                    <input id="domain" type="text" placeholder="aivideoauto.com" value={apiConfig.domain || ''} onChange={(event) => setApiConfigState({ ...apiConfig, domain: event.target.value.trim() })} />
+                    <label htmlFor="domain">Domain kết nối (Mặc định: omnivi.ai):</label>
+                    <input id="domain" type="text" placeholder="omnivi.ai" value={apiConfig.domain || ''} onChange={(event) => setApiConfigState({ ...apiConfig, domain: event.target.value.trim() })} />
                     <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>
-                      Tên miền đăng ký tài khoản (mặc định: <code>aivideoauto.com</code>). <strong>Lưu ý:</strong> Không thêm <code>https://</code> hoặc dấu <code>/</code> ở cuối.
+                      Tên miền đăng ký tài khoản (mặc định: <code>omnivi.ai</code>). <strong>Lưu ý:</strong> Không thêm <code>https://</code> hoặc dấu <code>/</code> ở cuối.
                     </div>
                   </div>
                 </div>

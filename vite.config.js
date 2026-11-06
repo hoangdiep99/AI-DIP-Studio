@@ -15,7 +15,12 @@ export default defineConfig({
       ignored: ['**/release/**', '**/dist/**'],
     },
     proxy: {
-
+      '/api-proxy/omnivi': {
+        target: 'https://omnivi.ai',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api-proxy\/omnivi/, ''),
+      },
       '/gemini-proxy': {
         target: 'https://generativelanguage.googleapis.com',
         changeOrigin: true,
@@ -51,8 +56,3 @@ export default defineConfig({
     }
   },
 });
-
-
-
-
-

@@ -5,17 +5,17 @@ const STEPS = [
     id: 1,
     title: 'Tạo tài khoản và kích hoạt',
     items: [
-      <>Truy cập vào trang web: <a href="https://aivideoauto.com/?ref=12b6bc19273b3979" target="_blank" rel="noopener noreferrer">AI VIDEO AUTO</a></>,
-      'Tiến hành đăng ký một tài khoản mới.',
-      'Nạp 50.000 VNĐ để kích hoạt dịch vụ hoặc chọn gói phù hợp trên AI VIDEO AUTO.',
+      <>Truy cập vào trang web: <a href="https://omnivi.ai/vi" target="_blank" rel="noopener noreferrer">OMNIVI.AI</a></>,
+      'Tiến hành đăng ký hoặc đăng nhập tài khoản (tài khoản và số dư từ AI VIDEO AUTO cũ đã được chuyển sang tự động).',
+      'Nạp tiền hoặc chọn gói dịch vụ phù hợp trên OmniVi.AI để sử dụng.',
     ],
   },
   {
     id: 2,
-    title: 'Lấy mã API Token',
+    title: 'Lấy mã API Key (Token)',
     items: [
-      <>Sau khi đăng nhập AI VIDEO AUTO, truy cập trang Cài đặt Token tại: <a href="https://aivideoauto.com/settings/tokens" target="_blank" rel="noopener noreferrer">aivideoauto.com/settings/tokens</a></>,
-      'Tạo hoặc Sao chép (Copy) API Key của bạn.',
+      <>Sau khi đăng nhập OmniVi.AI, truy cập mục Cài đặt Tài khoản tại: <a href="https://omnivi.ai/vi/account" target="_blank" rel="noopener noreferrer">omnivi.ai/vi/account</a></>,
+      'Mở thẻ API, tạo hoặc sao chép (Copy) API Key của bạn.',
     ],
   },
   {
@@ -23,8 +23,8 @@ const STEPS = [
     title: 'Đăng nhập vào phần mềm',
     items: [
       'Trên giao diện app, mở mục ⚙️ Cấu hình API ở góc phải trên cùng.',
-      'Chọn mục API Hệ thống / bên thứ ba, nhập endpoint chính là https://api.aivideoauto.com và dán API Token vừa copy.',
-      'Nhấn Đăng nhập để hoàn tất kết nối và bắt đầu trải nghiệm.',
+      'Chọn mục API Hệ thống, kiểm tra endpoint chính là https://omnivi.ai/api/v2 (mặc định) và dán API Key vừa copy.',
+      'Nhấn Đăng nhập để hoàn tất kết nối và bắt đầu tạo ảnh ngay.',
     ],
   },
 ];
@@ -33,8 +33,8 @@ const SetupGuide = ({ onTestThanksPopup }) => {
   return (
     <div className="guide-page module-enter">
       <div className="guide-hero">
-        <h2>📘 Hướng Dẫn Kết Nối Hệ Thống</h2>
-        <p>Để bắt đầu sử dụng đầy đủ các tính năng của công cụ, bạn vui lòng kết nối với hệ thống chính AI VIDEO AUTO theo 3 bước đơn giản sau.</p>
+        <h2>📘 Hướng Dẫn Kết Nối Hệ Thống OmniVi.AI</h2>
+        <p>Để bắt đầu sử dụng đầy đủ các tính năng tạo ảnh thẻ AI và phục hồi ảnh, bạn vui lòng kết nối với hệ thống OmniVi.AI theo 3 bước đơn giản sau.</p>
       </div>
 
       <div className="guide-steps">
@@ -57,7 +57,7 @@ const SetupGuide = ({ onTestThanksPopup }) => {
         <span className="guide-warning-icon">⚠️</span>
         <div>
           <strong>Lưu ý bảo mật</strong>
-          <p>Mã Token là thông tin cá nhân quan trọng. Vui lòng bảo mật tuyệt đối và không chia sẻ cho bất kỳ ai ngoài các bước hướng dẫn trên để bảo vệ tài khoản của bạn.</p>
+          <p>Mã API Key là thông tin cá nhân quan trọng. Vui lòng bảo mật tuyệt đối và không chia sẻ cho bất kỳ ai ngoài các bước hướng dẫn trên để bảo vệ số dư tài khoản của bạn.</p>
         </div>
       </div>
 
@@ -71,6 +71,5 @@ const SetupGuide = ({ onTestThanksPopup }) => {
     </div>
   );
 };
-
 
 export default SetupGuide;
