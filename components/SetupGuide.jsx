@@ -5,17 +5,18 @@ const STEPS = [
     id: 1,
     title: 'Tạo tài khoản và kích hoạt',
     items: [
-      <>Truy cập vào trang web: <a href="https://omnivi.ai/vi" target="_blank" rel="noopener noreferrer">OMNIVI.AI</a></>,
+      <>Truy cập vào trang web: <a href="https://omnivi.ai/ref/diephoang1295b34e6d08" target="_blank" rel="noopener noreferrer">OMNIVI.AI</a></>,
       'Tiến hành đăng ký hoặc đăng nhập tài khoản (tài khoản và số dư từ AI VIDEO AUTO cũ đã được chuyển sang tự động).',
       'Nạp tiền hoặc chọn gói dịch vụ phù hợp trên OmniVi.AI để sử dụng.',
     ],
   },
   {
     id: 2,
-    title: 'Lấy mã API Key (Token)',
+    title: 'Lấy mã API Key (Token) & Thêm IP Whitelist',
     items: [
       <>Sau khi đăng nhập OmniVi.AI, truy cập mục Cài đặt Tài khoản tại: <a href="https://omnivi.ai/vi/account" target="_blank" rel="noopener noreferrer">omnivi.ai/vi/account</a></>,
       'Mở thẻ API, tạo hoặc sao chép (Copy) API Key của bạn.',
+      'Khuyến nghị: Tại thẻ "IP Whitelist", bấm nút "Thêm IP hiện tại" để tránh bị giới hạn hoặc chặn IP khi tải ảnh.',
     ],
   },
   {

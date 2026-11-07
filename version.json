@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.7",
-  "releaseDate": "06/11/2026",
-  "title": "AI DIP Studio v2.1.7 - Cập Nhật Hệ Thống OmniVi.AI (v2)",
-  "changelog": "• CHUYỂN ĐỔI SANG HỆ THỐNG MỚI OMNIVI.AI: Đồng bộ toàn diện theo thông báo chuyển đổi từ AIVIDEOAUTO sang OMNIVI.AI; kết nối trực tiếp API v2 (https://omnivi.ai/api/v2).\n• TỰ ĐỘNG NÂNG CẤP VÀ DI CHUYỂN DỮ LIỆU: Tự động chuyển đổi domain và endpoint cũ sang omnivi.ai mà không làm mất cấu hình của người dùng.\n• TÍCH HỢP UPLOAD ẢNH CHUẨN OMNIVI: Hỗ trợ upload ảnh đầu vào trực tiếp qua /upload-media và đặt lệnh tạo ảnh qua /create, theo dõi tiến độ qua /status.\n• CẬP NHẬT HƯỚNG DẪN & LIÊN KẾT: Toàn bộ liên kết nạp tiền, bảng giá, đăng nhập và lấy API Key đã được cập nhật chuẩn xác theo trang omnivi.ai.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.7/AI-DIP-Studio-Setup-2.1.7.exe",
+  "latestVersion": "2.1.8",
+  "releaseDate": "07/11/2026",
+  "title": "AI DIP Studio v2.1.8 - Tối Ưu Upload OmniVi & Cập Nhật Hướng Dẫn",
+  "changelog": "• TỐI ƯU CACHE TẢI ẢNH OMNIVI: Tự động lưu cache ảnh đã tải lên để tái sử dụng, tránh vượt quá giới hạn 25 lần/5 phút (429 rate_limit.ip-blocked).\n• CẬP NHẬT LIÊN KẾT ĐĂNG KÝ OMNIVI.AI: Cập nhật đường dẫn truy cập và hướng dẫn thêm IP Whitelist trên trang tài khoản OmniVi.AI.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.8/AI-DIP-Studio-Setup-2.1.8.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
