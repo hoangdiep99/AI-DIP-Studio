@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.1.8",
-  "releaseDate": "07/11/2026",
-  "title": "AI DIP Studio v2.1.8 - Tối Ưu Upload OmniVi & Cập Nhật Hướng Dẫn",
-  "changelog": "• TỐI ƯU CACHE TẢI ẢNH OMNIVI: Tự động lưu cache ảnh đã tải lên để tái sử dụng, tránh vượt quá giới hạn 25 lần/5 phút (429 rate_limit.ip-blocked).\n• CẬP NHẬT LIÊN KẾT ĐĂNG KÝ OMNIVI.AI: Cập nhật đường dẫn truy cập và hướng dẫn thêm IP Whitelist trên trang tài khoản OmniVi.AI.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.8/AI-DIP-Studio-Setup-2.1.8.exe",
+  "latestVersion": "2.1.9",
+  "releaseDate": "10/11/2026",
+  "title": "AI DIP Studio v2.1.9 - Cập Nhật Đồng Bộ API OmniVi & Tự Động Kiểm Tra Key",
+  "changelog": "• ĐỒNG BỘ TOÀN DIỆN VỚI OMNIVI.AI: Loại bỏ hoàn toàn các endpoint cũ đã dừng hoạt động, tự động kết nối trực tiếp đến https://omnivi.ai/api/v2.\n• TỰ ĐỘNG DỌN DẸP TOKEN CŨ & KIỂM TRA KEY: Tự động loại bỏ token cũ của AI VIDEO AUTO để tránh bị OmniVi chặn IP (api_key_abuse); kiểm tra tính hợp lệ và hiển thị số dư thực tế ngay khi đăng nhập.\n• BỔ SUNG PHÍM TẮT ĐỔI API KEY: Cho phép đổi API Key và cập nhật số dư trực tiếp trong bảng AI Credits một cách dễ dàng.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.1.9/AI-DIP-Studio-Setup-2.1.9.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

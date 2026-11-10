@@ -348,38 +348,46 @@ function App() {
       }
     }
 
-    const attempts = [
-      { endpoint: '/me', method: 'POST', body: {} },
-      { endpoint: '/api/apps/go-mmo/ai/me', method: 'POST', body: {} },
-      { endpoint: '/api/apps/go-mmo/ai/me', method: 'GET', body: {} }
-    ];
-    let lastError = null;
-
-    for (const attempt of attempts) {
-      try {
-        const res = await gommoApi(attempt.endpoint, {
-          method: attempt.method,
-          body: attempt.body || {}
-        });
-        console.info('Credits API response:', attempt.endpoint, attempt.method, res);
-        const nextCredits = extractCredits(res);
-        if (nextCredits !== null) {
-          setCredits(Math.max(0, nextCredits));
-          setCreditsError('');
-          setLoadingCredits(false);
-          return nextCredits;
-        }
-        lastError = new Error(`API ${attempt.endpoint} (${attempt.method}) không trả về balancesInfo.credits_ai hoặc field số dư hợp lệ`);
-      } catch (err) {
-        lastError = err;
-      }
+    if (apiConfig.mode === 'custom') {
+      setLoadingCredits(false);
+      return 0;
     }
 
-    console.error('Lỗi tải credits:', lastError);
-    setCredits(0);
-    setCreditsError('Chưa đọc được số dư từ API ví. App đã thử /api/apps/go-mmo/ai/me bằng POST/GET nhưng response chưa có balancesInfo.credits_ai.');
-    setLoadingCredits(false);
-    return 0;
+    const token = (apiConfig.accessToken || '').trim().replace(/^Bearer\s+/i, '');
+    if (!token) {
+      setCredits(0);
+      setCreditsError('Bạn chưa cài đặt API Key OmniVi. Vui lòng bấm "⚙️ Đổi API Key" bên dưới để nhập API Key từ omnivi.ai.');
+      setLoadingCredits(false);
+      return 0;
+    }
+
+    try {
+      const res = await gommoApi('/me', {
+        method: 'POST',
+        body: {}
+      });
+      console.info('Credits API response:', res);
+      const nextCredits = extractCredits(res);
+      if (nextCredits !== null) {
+        setCredits(Math.max(0, nextCredits));
+        setCreditsError('');
+        setLoadingCredits(false);
+        return nextCredits;
+      }
+      throw new Error('Response không chứa thông tin balancesInfo.balance');
+    } catch (err) {
+      console.error('Lỗi tải credits:', err);
+      setCredits(0);
+      let errMsg = err.message || 'Không kết nối được API OmniVi.';
+      if (/rate_limit|ip-blocked|api_key_abuse/i.test(errMsg)) {
+        errMsg = 'OmniVi tạm chặn IP do API Key chưa đúng hoặc gọi quá nhiều lần. Vui lòng đợi 3-5 phút và cập nhật lại API Key mới từ trang omnivi.ai/vi/account (mục API).';
+      } else if (/invalidKey|unauthorized/i.test(errMsg)) {
+        errMsg = 'API Key chưa chính xác hoặc đã hết hạn. Vui lòng vào omnivi.ai/vi/account (mục API) để sao chép lại API Key mới.';
+      }
+      setCreditsError(errMsg);
+      setLoadingCredits(false);
+      return 0;
+    }
   };
 
 
@@ -582,11 +590,44 @@ function App() {
     setLoginSuccess(false);
     setLoginInProgress(true);
     try {
-      // Với chế độ Gemini Key cá nhân, gọi thử API thật (validateGeminiKey) trước khi báo
-      // thành công — trước đây nút này chỉ lưu localStorage rồi báo "thành công" ngay,
-      // nên key sai/hết hạn chỉ phát hiện được lúc tạo ảnh, gây khó hiểu cho người dùng.
       if (apiConfig.mode === 'custom') {
         await validateGeminiKey(apiConfig);
+      } else if (apiConfig.mode === 'system') {
+        const token = (apiConfig.accessToken || '').trim().replace(/^Bearer\s+/i, '');
+        if (!token) {
+          throw new Error('Vui lòng nhập API Key từ tài khoản OmniVi.AI của bạn.');
+        }
+        apiConfig.accessToken = token;
+        apiConfig.customEndpoint = 'https://omnivi.ai/api/v2';
+        apiConfig.domain = 'omnivi.ai';
+
+        const testRes = await fetch('https://omnivi.ai/api/v2/me', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+          }
+        });
+        const testText = await testRes.text();
+        let testData = null;
+        try { testData = JSON.parse(testText); } catch(e) { testData = testText; }
+
+        if (!testRes.ok) {
+          if (testRes.status === 429 || /rate_limit|ip-blocked|api_key_abuse/i.test(testText)) {
+            const waitSec = testData?.remainingTime || 180;
+            throw new Error(`IP máy đang bị OmniVi tạm chặn (${waitSec}s) do API Key chưa đúng hoặc gọi quá nhiều lần. Vui lòng đợi ${waitSec}s rồi thử lại, hoặc vào https://omnivi.ai/vi/account thêm IP vào ô IP Whitelist.`);
+          }
+          if (testRes.status === 403 || /invalidKey|unauthorized/i.test(testText)) {
+            throw new Error('API Key không hợp lệ. Vui lòng vào https://omnivi.ai/vi/account (mục API) để sao chép đúng API Key.');
+          }
+          throw new Error(`Kết nối OmniVi thất bại (${testRes.status}): ${testData?.message || testData?.error_code || testRes.statusText}`);
+        }
+
+        const bal = testData?.balancesInfo?.balance ?? testData?.balancesInfo?.credits_ai;
+        if (bal !== undefined) {
+          setCredits(Math.max(0, bal));
+          setCreditsError('');
+        }
       }
       saveApiConfig(apiConfig);
 
@@ -827,17 +868,25 @@ function App() {
             <div className="modal-body">
               <div className="credit-balance-card">
                 <span>Số dư hiện tại</span>
-                <strong>{loadingCredits ? 'Đang cập nhật...' : apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${credits.toLocaleString('vi-VN')} Credits`}</strong>
-                <button className="btn-secondary" onClick={fetchCredits} disabled={loadingCredits}>
-
-                  {loadingCredits ? 'Đang tải...' : '↻ Cập nhật số dư'}
-                </button>
-                {creditsError && <p className="hint-text" style={{ width: '100%', marginTop: '8px' }}>⚠ {creditsError}</p>}
+                <strong>{loadingCredits ? 'Đang cập nhật...' : apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${credits.toLocaleString('vi-VN')} Credits ($${credits})`}</strong>
+                <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                  <button className="btn-secondary" onClick={fetchCredits} disabled={loadingCredits}>
+                    {loadingCredits ? 'Đang tải...' : '↻ Cập nhật số dư'}
+                  </button>
+                  <button className="btn-secondary" onClick={() => { setShowCreditsModal(false); setShowConfigModal(true); }}>
+                    ⚙️ Đổi API Key
+                  </button>
+                </div>
+                {creditsError && (
+                  <div className="hint-text" style={{ width: '100%', marginTop: '10px', color: '#ff7b72', background: 'rgba(255, 123, 114, 0.1)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255, 123, 114, 0.2)' }}>
+                    ⚠ {creditsError}
+                  </div>
+                )}
               </div>
 
               <div className="payment-box">
                 <h4>⚡ Nạp Credits trên trang chủ</h4>
-                <p>Bấm nút bên dưới để mở trang bảng giá/nạp Credits chính thức của AI VIDEO AUTO.</p>
+                <p>Bấm nút bên dưới để mở trang bảng giá/nạp Credits chính thức của OmniVi.AI.</p>
                 <div className="pricing-card">
                   <span>Trang nạp chính thức</span>
                   <strong>omnivi.ai/vi/prices</strong>
@@ -860,7 +909,7 @@ function App() {
               <button className="close-btn" onClick={() => setShowConfigModal(false)}>×</button>
             </div>
             <form onSubmit={handleSaveConfig} className="modal-body">
-              <p className="modal-desc">Kết nối chính dùng AI VIDEO AUTO hoặc Google Gemini API Key cá nhân.</p>
+              <p className="modal-desc">Kết nối chính dùng OmniVi.AI hoặc Google Gemini API Key cá nhân.</p>
 
               <div className="form-group">
                 <label>Chế độ kết nối:</label>
@@ -874,8 +923,8 @@ function App() {
                       onChange={() => setApiConfigState({ ...apiConfig, mode: 'system' })}
                     />
                     <div>
-                      <strong>API hệ thống AI VIDEO AUTO (Khuyên dùng - Mặc định)</strong>
-                      <div style={{ fontSize: 12, color: 'var(--muted, #bbb)' }}>Kết nối chính qua https://omnivi.ai/api/v2 (OmniVi.AI).</div>
+                      <strong>Hệ thống OmniVi.AI (Khuyên dùng - Mặc định)</strong>
+                      <div style={{ fontSize: 12, color: 'var(--muted, #bbb)' }}>Kết nối trực tiếp API v2 (https://omnivi.ai/api/v2).</div>
                     </div>
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -893,7 +942,6 @@ function App() {
                   </label>
                 </div>
               </div>
-
 
               {apiConfig.mode === 'custom' && (
                 <div className="custom-fields">
@@ -915,22 +963,33 @@ function App() {
               {apiConfig.mode === 'system' && (
                 <div className="custom-fields">
                   <div className="form-group">
-                    <label htmlFor="custom_endpoint">API Endpoint:</label>
-                    <input id="custom_endpoint" type="text" placeholder="https://api.gommo.net" value={apiConfig.customEndpoint || ''} onChange={(event) => setApiConfigState({ ...apiConfig, customEndpoint: event.target.value.trim() })} required />
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>Endpoint chính khuyến nghị: <code>https://api.gommo.net</code>. App sẽ gọi /ai/generateImage hoặc /models qua host này.</div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="access_token">Access Token:</label>
-                    <input id="access_token" type="password" placeholder="Access Token" value={apiConfig.accessToken || ''} onChange={(event) => setApiConfigState({ ...apiConfig, accessToken: event.target.value })} />
-                    <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>Nhập Access Token đã tạo từ trang omnivi.ai/vi/account (mục API).</div>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="domain">Domain kết nối (Mặc định: omnivi.ai):</label>
-                    <input id="domain" type="text" placeholder="omnivi.ai" value={apiConfig.domain || ''} onChange={(event) => setApiConfigState({ ...apiConfig, domain: event.target.value.trim() })} />
+                    <label htmlFor="access_token">OmniVi API Key (Token):</label>
+                    <input
+                      id="access_token"
+                      type="password"
+                      placeholder="Dán API Key từ omnivi.ai/vi/account vào đây"
+                      value={apiConfig.accessToken || ''}
+                      onChange={(event) => setApiConfigState({ ...apiConfig, accessToken: event.target.value.trim() })}
+                      required
+                    />
                     <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>
-                      Tên miền đăng ký tài khoản (mặc định: <code>omnivi.ai</code>). <strong>Lưu ý:</strong> Không thêm <code>https://</code> hoặc dấu <code>/</code> ở cuối.
+                      Lấy API Key: Đăng nhập tại <a href="https://omnivi.ai/vi/account" target="_blank" rel="noopener noreferrer" style={{ color: '#58a6ff' }}>omnivi.ai/vi/account</a> &gt; Mở mục <strong>API</strong> &gt; Sao chép API Key và dán vào đây.
                     </div>
                   </div>
+
+                  <details style={{ marginTop: 8, fontSize: 13 }}>
+                    <summary style={{ cursor: 'pointer', color: 'var(--muted, #888)' }}>⚙️ Tùy chọn nâng cao (Endpoint & Domain)</summary>
+                    <div style={{ padding: '8px 0' }}>
+                      <div className="form-group" style={{ marginBottom: 8 }}>
+                        <label htmlFor="custom_endpoint" style={{ fontSize: 12 }}>API Endpoint:</label>
+                        <input id="custom_endpoint" type="text" placeholder="https://omnivi.ai/api/v2" value={apiConfig.customEndpoint || 'https://omnivi.ai/api/v2'} onChange={(event) => setApiConfigState({ ...apiConfig, customEndpoint: event.target.value.trim() })} />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="domain" style={{ fontSize: 12 }}>Domain:</label>
+                        <input id="domain" type="text" placeholder="omnivi.ai" value={apiConfig.domain || 'omnivi.ai'} onChange={(event) => setApiConfigState({ ...apiConfig, domain: event.target.value.trim() })} />
+                      </div>
+                    </div>
+                  </details>
                 </div>
               )}
 
