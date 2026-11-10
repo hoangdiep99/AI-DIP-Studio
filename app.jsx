@@ -277,9 +277,14 @@ function App() {
     setLoadingAccount(true);
     setAccountError('');
     let lastError = null;
+
+    if (apiConfig.mode !== 'system' || !apiConfig.accessToken) {
+      setLoadingAccount(false);
+      return null;
+    }
+
     const attempts = [
-      { endpoint: '/api/apps/go-mmo/ai/me', method: 'POST' },
-      { endpoint: '/api/apps/go-mmo/ai/me', method: 'GET' }
+      { endpoint: '/me', method: 'POST' }
     ];
 
     const debugEntries = [];
@@ -463,20 +468,7 @@ function App() {
   }, [apiConfig.mode, apiConfig.accessToken, apiConfig.customEndpoint, apiConfig.domain, apiConfig.openaiBaseUrl, apiConfig.openaiApiKey]);
 
 
-  useEffect(() => {
-    const refreshWhenVisible = () => {
-      if (!document.hidden) {
-        fetchCredits();
-        fetchAccount();
-      }
-    };
-    window.addEventListener('focus', refreshWhenVisible);
-    document.addEventListener('visibilitychange', refreshWhenVisible);
-    return () => {
-      window.removeEventListener('focus', refreshWhenVisible);
-      document.removeEventListener('visibilitychange', refreshWhenVisible);
-    };
-  }, []);
+  // Đã bỏ auto-refresh khi focus/visibilitychange để tránh spam API gây chặn IP
 
   // Cứ mỗi 35 phút (trong khoảng 30-45 phút) sử dụng app hiện popup Tác giả / Cảm ơn 1 lần.
   // Mẹo test nhanh: mở app với URL có thêm ?test_thanks=1 (ví dụ index.html?test_thanks=1)
