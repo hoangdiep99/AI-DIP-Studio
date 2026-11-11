@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.2.3",
+  "latestVersion": "2.2.4",
   "releaseDate": "11/11/2026",
-  "title": "AI DIP Studio v2.2.3 - Khắc Phục Lỗi getMediaOptionsFromSource & Tạo Ảnh Mượt Mà",
-  "changelog": "• SỬA LỖI TẠO ẢNH & PHỤC HỒI: Khắc phục triệt để lỗi ReferenceError: getMediaOptionsFromSource is not defined khi bấm Tạo ảnh thẻ hoặc Phục hồi ảnh cũ.\n• ĐỒNG BỘ HIỂN THỊ SỐ DƯ: Hiển thị chuẩn xác 50,000 Credits ($2.00) trùng khớp 100% với giao diện web OmniVi.AI theo tỷ giá $1 = 25,000 Credit.\n• CHỐNG CHẶN IP: Tối ưu hóa toàn bộ các cuộc gọi API và upload ảnh để bảo vệ kết nối luôn thông suốt.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.2.3/AI-DIP-Studio-Setup-2.2.3.exe",
+  "title": "AI DIP Studio v2.2.4 - Nâng Cấp Độ Chính Xác Phân Tích Chân Dung",
+  "changelog": "• NÂNG CẤP PHÂN TÍCH CHÂN DUNG AI: Cải tiến thuật toán nhận diện tóc dài, màu son môi và bối cảnh ánh sáng trong phòng để phân loại chuẩn xác giới tính Nữ/Nam và độ tuổi thanh niên sinh viên.\n• SỬA LỖI TỪ KHÓA TÊN FILE: Loại bỏ việc nhận nhầm từ 'anh' (ảnh) và 'cu' (cử nhân) thành người cao tuổi hoặc nam giới.\n• TỐI ƯU GIAO DIỆN: Nút '⇄ Đổi' giới tính nhanh nhạy và mượt mà hơn.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.2.4/AI-DIP-Studio-Setup-2.2.4.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
