@@ -571,8 +571,17 @@ function App() {
           setCredits(Math.max(0, bal));
           setCreditsError('');
         }
+
+        let payload = unwrapAccountPayload(testData);
+        if (!payload || typeof payload !== 'object' || Object.keys(payload).length === 0) {
+          payload = extractAccountCandidate(testData);
+        }
+        if (payload && typeof payload === 'object' && Object.keys(payload).length > 0) {
+          setAccountInfo(payload);
+        }
       }
       saveApiConfig(apiConfig);
+      refreshAccountAndCredits();
 
 
       setLoginSuccess(true);
@@ -621,7 +630,7 @@ function App() {
         <div className="header-actions">
           <button className="credits-badge" onClick={openCreditsModal} title="Xem số dư và nạp Credits">
             <span>🪙</span>
-            <span>{loadingCredits ? '...' : apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${credits.toLocaleString('vi-VN')} Credits`}</span>
+            <span>{loadingCredits ? '...' : apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${Math.round(credits * 25000).toLocaleString('vi-VN')} Credits`}</span>
           </button>
 
 
@@ -753,7 +762,7 @@ function App() {
                         </div>
                       </div>
 
-                      <div className="account-row"><span>{apiConfig.mode === 'openai' ? 'Số dư (USD)' : 'Số dư AI Credits'}</span><strong>{apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${credits.toLocaleString('vi-VN')} Credits`}</strong></div>
+                      <div className="account-row"><span>{apiConfig.mode === 'openai' ? 'Số dư (USD)' : 'Số dư AI Credits'}</span><strong>{apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${Math.round(credits * 25000).toLocaleString('vi-VN')} Credits ($${credits.toFixed(2)})`}</strong></div>
 
                       <div className="account-row"><span>Gói dịch vụ</span><strong>{getSubscriptionText()}</strong></div>
                       <div className="account-row"><span>API hiện tại</span><strong>{apiConfig.mode === 'custom' ? 'API cá nhân' : 'AI VIDEO AUTO Bridge'}</strong></div>
@@ -811,7 +820,7 @@ function App() {
             <div className="modal-body">
               <div className="credit-balance-card">
                 <span>Số dư hiện tại</span>
-                <strong>{loadingCredits ? 'Đang cập nhật...' : apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${credits.toLocaleString('vi-VN')} Credits ($${credits})`}</strong>
+                <strong>{loadingCredits ? 'Đang cập nhật...' : apiConfig.mode === 'openai' ? `$${credits.toFixed(2)}` : `${Math.round(credits * 25000).toLocaleString('vi-VN')} Credits ($${credits.toFixed(2)})`}</strong>
                 <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
                   <button className="btn-secondary" onClick={fetchCredits} disabled={loadingCredits}>
                     {loadingCredits ? 'Đang tải...' : '↻ Cập nhật số dư'}
