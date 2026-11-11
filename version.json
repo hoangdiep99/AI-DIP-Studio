@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.2.1",
+  "latestVersion": "2.2.2",
   "releaseDate": "11/11/2026",
-  "title": "AI DIP Studio v2.2.1 - Chống Chặn IP OmniVi & Tối Giản Request",
-  "changelog": "• TRIỆT TIÊU TOÀN BỘ VÒNG LẶP REQUEST: Xóa bỏ hoàn toàn 16 request thừa khi tải model và hợp nhất số dư / thông tin tài khoản thành 1 request duy nhất, ngăn tuyệt đối việc bị OmniVi tạm khóa IP do spam request.\n• CHẶN KÝ TỰ ẨN (CHẤM ĐEN •••): Thêm tính năng phát hiện và cảnh báo khi người dùng bôi đen copy dấu chấm ẩn từ trang web thay vì bấm nút sao chép API Key.\n• DỪNG GỌI LẠI KHI SAI KEY (401/403/429): Tự động ngắt kết nối ngay lập tức nếu API Key không hợp lệ, không thử lại liên tục làm khóa IP.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.2.1/AI-DIP-Studio-Setup-2.2.1.exe",
+  "title": "AI DIP Studio v2.2.2 - Đồng Bộ Số Dư Credit OmniVi & Tối Ưu Kết Nối",
+  "changelog": "• ĐỒNG BỘ HIỂN THỊ SỐ DƯ: Hiển thị chuẩn xác số dư 50,000 Credits ($2.00) trùng khớp 100% với giao diện web OmniVi.AI theo tỷ giá $1 = 25,000 Credit.\n• TRIỆT TIÊU TOÀN BỘ VÒNG LẶP REQUEST: Xóa bỏ hoàn toàn 16 request thừa khi tải model và hợp nhất số dư / thông tin tài khoản thành 1 request duy nhất, ngăn tuyệt đối việc bị OmniVi tạm khóa IP do spam request.\n• CHẶN KÝ TỰ ẨN (CHẤM ĐEN •••): Thêm tính năng phát hiện và cảnh báo khi người dùng bôi đen copy dấu chấm ẩn từ trang web thay vì bấm nút sao chép API Key.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.2.2/AI-DIP-Studio-Setup-2.2.2.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }
