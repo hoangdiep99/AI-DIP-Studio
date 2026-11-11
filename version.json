@@ -1,8 +1,8 @@
 {
-  "latestVersion": "2.2.0",
-  "releaseDate": "10/11/2026",
-  "title": "AI DIP Studio v2.2.0 - Tối Ưu Kết Nối Đơn OmniVi.AI & Tự Động Cập Nhật",
-  "changelog": "• TỐI ƯU HÓA REQUEST ĐĂNG NHẬP: Gửi duy nhất 1 request xác thực lên OmniVi.AI (POST /me), loại bỏ toàn bộ vòng lặp fallback cũ để tránh vượt ngưỡng 20 request/15 phút.\n• BỎ TỰ ĐỘNG REFRESH KHI FOCUS: Loại bỏ sự kiện tự động gọi API khi chuyển đổi cửa sổ, tránh gửi request ngầm gây chặn IP.\n• TỰ ĐỘNG DỌN DẸP DỮ LIỆU CŨ: Tự động loại bỏ hoàn toàn các mã token cũ của AI VIDEO AUTO/Gommo và thiết lập endpoint chuẩn https://omnivi.ai/api/v2.",
-  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.2.0/AI-DIP-Studio-Setup-2.2.0.exe",
+  "latestVersion": "2.2.1",
+  "releaseDate": "11/11/2026",
+  "title": "AI DIP Studio v2.2.1 - Chống Chặn IP OmniVi & Tối Giản Request",
+  "changelog": "• TRIỆT TIÊU TOÀN BỘ VÒNG LẶP REQUEST: Xóa bỏ hoàn toàn 16 request thừa khi tải model và hợp nhất số dư / thông tin tài khoản thành 1 request duy nhất, ngăn tuyệt đối việc bị OmniVi tạm khóa IP do spam request.\n• CHẶN KÝ TỰ ẨN (CHẤM ĐEN •••): Thêm tính năng phát hiện và cảnh báo khi người dùng bôi đen copy dấu chấm ẩn từ trang web thay vì bấm nút sao chép API Key.\n• DỪNG GỌI LẠI KHI SAI KEY (401/403/429): Tự động ngắt kết nối ngay lập tức nếu API Key không hợp lệ, không thử lại liên tục làm khóa IP.",
+  "downloadUrlWindows": "https://github.com/hoangdiep99/AI-DIP-Studio/releases/download/v2.2.1/AI-DIP-Studio-Setup-2.2.1.exe",
   "githubRepo": "https://github.com/hoangdiep99/AI-DIP-Studio"
 }

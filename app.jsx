@@ -273,115 +273,74 @@ function App() {
     return accountError || status.includes('unavailable') || status.includes('expired') || status.includes('inactive') || status.includes('disabled');
   };
 
-  const fetchAccount = async () => {
-    setLoadingAccount(true);
-    setAccountError('');
-    let lastError = null;
-
-    if (apiConfig.mode !== 'system' || !apiConfig.accessToken) {
-      setLoadingAccount(false);
-      return null;
-    }
-
-    const attempts = [
-      { endpoint: '/me', method: 'POST' }
-    ];
-
-    const debugEntries = [];
-    try {
-      for (const attempt of attempts) {
-        try {
-          const res = await gommoApi(attempt.endpoint, { method: attempt.method, body: {} });
-          let payload = unwrapAccountPayload(res);
-          const hasData = payload && typeof payload === 'object' && Object.keys(payload).length > 0;
-          if (!hasData) {
-            const candidate = extractAccountCandidate(res);
-            if (candidate) {
-              payload = candidate;
-            }
-          }
-          const finalHasData = payload && typeof payload === 'object' && Object.keys(payload).length > 0;
-          debugEntries.push({ endpoint: attempt.endpoint, method: attempt.method, success: finalHasData, payload, raw: res });
-          if (finalHasData) {
-            setAccountInfo(payload);
-            setAccountDebug(debugEntries);
-            const nextCredits = extractCredits(res);
-            if (nextCredits !== null) setCredits(Math.max(0, nextCredits));
-            const sub = payload?.currentSubscription || payload?.subscription || payload?.plan || null;
-            const status = String(sub?.status || sub?.state || '').toLowerCase();
-            if (status.includes('unavailable') || status.includes('expired') || status.includes('inactive') || status.includes('disabled')) {
-              setAccountError('Hiện gói dịch vụ không khả dụng tại thời điểm này. Vui lòng kiểm tra gói hoặc đổi tài khoản.');
-            }
-            return payload;
-          }
-          lastError = new Error(`Không có dữ liệu tài khoản từ ${attempt.endpoint} (${attempt.method})`);
-        } catch (err) {
-          console.warn('Account endpoint failed:', attempt.endpoint, attempt.method, err);
-          debugEntries.push({ endpoint: attempt.endpoint, method: attempt.method, success: false, error: String(err.message || err) });
-          lastError = err;
-        }
-      }
-
-      setAccountInfo(null);
-      setAccountDebug(debugEntries);
-      setAccountError(lastError?.message || 'Không đọc được thông tin tài khoản.');
-      return null;
-    } finally {
-      setLoadingAccount(false);
-    }
-  };
-
-  const fetchCredits = async () => {
-    setLoadingCredits(true);
-    setCreditsError('');
-
-    // Chế độ RunningHub/OpenAI-compatible: số dư tùy theo nhà cung cấp,
-    // không có khái niệm "Credits" của hệ thống Gommo.
+  /**
+   * Đồng bộ tài khoản và Credits từ OmniVi.AI chỉ bằng DUY NHẤT 1 request POST /me
+   * Loại bỏ hoàn toàn gọi lặp lại hay concurrent duplicate requests để tránh bị chặn IP
+   */
+  const refreshAccountAndCredits = async () => {
     if (apiConfig.mode === 'openai') {
+      setLoadingCredits(true);
+      setCreditsError('');
       try {
         const usdBalance = await fetchOpenAiBalance(apiConfig);
         setCredits(Math.max(0, usdBalance));
         setCreditsError('');
-        setLoadingCredits(false);
         return usdBalance;
       } catch (err) {
         console.warn('Lỗi tải số dư OpenAI-compatible:', err);
         setCredits(0);
-        setCreditsError(`Chưa đọc được số dư USD từ ${apiConfig.openaiBaseUrl || 'nhà cung cấp'}. ${err?.message || ''} Vui lòng kiểm tra số dư trực tiếp trên trang quản lý của nhà cung cấp.`);
-        setLoadingCredits(false);
+        setCreditsError(`Chưa đọc được số dư USD từ ${apiConfig.openaiBaseUrl || 'nhà cung cấp'}. ${err?.message || ''}`);
         return 0;
+      } finally {
+        setLoadingCredits(false);
       }
     }
 
-    if (apiConfig.mode === 'custom') {
+    if (apiConfig.mode !== 'system') {
       setLoadingCredits(false);
+      setLoadingAccount(false);
       return 0;
     }
 
     const token = (apiConfig.accessToken || '').trim().replace(/^Bearer\s+/i, '');
     if (!token) {
+      setAccountInfo(null);
       setCredits(0);
       setCreditsError('Bạn chưa cài đặt API Key OmniVi. Vui lòng bấm "⚙️ Đổi API Key" bên dưới để nhập API Key từ omnivi.ai.');
+      setLoadingAccount(false);
       setLoadingCredits(false);
       return 0;
     }
 
+    setLoadingAccount(true);
+    setLoadingCredits(true);
+    setAccountError('');
+    setCreditsError('');
+
     try {
-      const res = await gommoApi('/me', {
-        method: 'POST',
-        body: {}
-      });
-      console.info('Credits API response:', res);
+      const res = await gommoApi('/me', { method: 'POST', body: {} });
       const nextCredits = extractCredits(res);
       if (nextCredits !== null) {
         setCredits(Math.max(0, nextCredits));
         setCreditsError('');
-        setLoadingCredits(false);
-        return nextCredits;
       }
-      throw new Error('Response không chứa thông tin balancesInfo.balance');
+
+      let payload = unwrapAccountPayload(res);
+      if (!payload || typeof payload !== 'object' || Object.keys(payload).length === 0) {
+        payload = extractAccountCandidate(res);
+      }
+      if (payload && typeof payload === 'object' && Object.keys(payload).length > 0) {
+        setAccountInfo(payload);
+        const sub = payload?.currentSubscription || payload?.subscription || payload?.plan || null;
+        const status = String(sub?.status || sub?.state || '').toLowerCase();
+        if (status.includes('unavailable') || status.includes('expired') || status.includes('inactive') || status.includes('disabled')) {
+          setAccountError('Hiện gói dịch vụ không khả dụng tại thời điểm này.');
+        }
+      }
+      return nextCredits;
     } catch (err) {
-      console.error('Lỗi tải credits:', err);
+      console.warn('Lỗi đồng bộ tài khoản & credits OmniVi:', err);
+      setAccountInfo(null);
       setCredits(0);
       let errMsg = err.message || 'Không kết nối được API OmniVi.';
       if (/rate_limit|ip-blocked|api_key_abuse/i.test(errMsg)) {
@@ -389,20 +348,24 @@ function App() {
       } else if (/invalidKey|unauthorized/i.test(errMsg)) {
         errMsg = 'API Key chưa chính xác hoặc đã hết hạn. Vui lòng vào omnivi.ai/vi/account (mục API) để sao chép lại API Key mới.';
       }
+      setAccountError(errMsg);
       setCreditsError(errMsg);
-      setLoadingCredits(false);
       return 0;
+    } finally {
+      setLoadingAccount(false);
+      setLoadingCredits(false);
     }
   };
 
+  const fetchAccount = () => refreshAccountAndCredits();
+  const fetchCredits = () => refreshAccountAndCredits();
 
   useEffect(() => {
     async function fetchModels() {
       setLoadingModels(true);
       setModelError('');
 
-      // Chế độ RunningHub/OpenAI-compatible: lấy model của chính nhà cung cấp đó,
-      // không qua hệ thống Gommo.
+      // Chế độ RunningHub/OpenAI-compatible: lấy model của chính nhà cung cấp đó
       if (apiConfig.mode === 'openai') {
         try {
           const list = await fetchOpenAiModels(apiConfig);
@@ -421,50 +384,32 @@ function App() {
         return;
       }
 
-      const candidateEndpoints = [
-        '/models',
-        '/ai/models',
-        '/api/apps/go-mmo/ai/models',
-        '/api/apps/go-mmo/models',
-        '/api/apps/go-mmo/ai/model-list',
-        '/api/apps/go-mmo/ai/model',
-        '/ai/model/list',
-        '/api/v1/models'
-      ];
-      let lastError = null;
-      let loadedModels = [];
+      // OmniVi.AI v2: Nếu chưa nhập key, dùng ngay model có sẵn trong FALLBACK_MODELS (không gọi mạng)
+      if (!apiConfig.accessToken) {
+        setModels(FALLBACK_MODELS.image);
+        setLoadingModels(false);
+        return;
+      }
 
-      for (const endpoint of candidateEndpoints) {
-        for (const method of ['POST', 'GET']) {
-          try {
-            const res = await gommoApi(endpoint, { method, body: { type: 'image' } });
-            if (res?.success === false && res?.message) throw new Error(res.message);
-            const candidate = sanitizeImageModelList(toItems(res));
-            if (candidate.length) {
-              loadedModels = candidate;
-              break;
-            }
-            lastError = new Error(`Endpoint ${endpoint} ${method} returned no valid models`);
-          } catch (err) {
-            console.warn('Model endpoint failed:', endpoint, method, err);
-            lastError = err;
-          }
+      // Nếu đã có token, chỉ gọi đúng duy nhất 1 request POST /models
+      try {
+        const res = await gommoApi('/models', { method: 'POST', body: { type: 'image' } });
+        const candidate = sanitizeImageModelList(toItems(res));
+        if (candidate.length) {
+          setModels(candidate);
+        } else {
+          setModels(FALLBACK_MODELS.image);
         }
-        if (loadedModels.length) break;
+      } catch (err) {
+        console.warn('Lỗi tải model OmniVi, sử dụng danh mục mặc định:', err);
+        setModels(FALLBACK_MODELS.image);
+      } finally {
+        setLoadingModels(false);
       }
-
-      if (loadedModels.length) {
-        setModels(loadedModels);
-      } else {
-        setModels([]);
-        setModelError(lastError?.message || 'Không tải được danh sách model AI.');
-      }
-
-      setLoadingModels(false);
     }
+
     fetchModels();
-    fetchCredits();
-    fetchAccount();
+    refreshAccountAndCredits();
   }, [apiConfig.mode, apiConfig.accessToken, apiConfig.customEndpoint, apiConfig.domain, apiConfig.openaiBaseUrl, apiConfig.openaiApiKey]);
 
 
@@ -568,8 +513,14 @@ function App() {
 
   const handleSaveConfig = (event) => {
     event.preventDefault();
+    const token = (apiConfig.accessToken || '').trim().replace(/^Bearer\s+/i, '');
+    if (token.includes('•') || token.includes('●') || token.includes('***')) {
+      setLoginError('⚠ API Key chứa ký tự bị ẩn (chấm đen ••• hoặc sao ***). Vui lòng vào omnivi.ai/vi/account sao chép lại mã thật.');
+      return;
+    }
     saveApiConfig(apiConfig);
     setSaveSuccess(true);
+    refreshAccountAndCredits();
     setTimeout(() => {
       setSaveSuccess(false);
       setShowConfigModal(false);
@@ -958,14 +909,22 @@ function App() {
                     <label htmlFor="access_token">OmniVi API Key (Token):</label>
                     <input
                       id="access_token"
-                      type="password"
-                      placeholder="Dán API Key từ omnivi.ai/vi/account vào đây"
+                      type="text"
+                      placeholder="Dán mã API Key dạng chuỗi từ omnivi.ai (vd: c44775d7-...)"
                       value={apiConfig.accessToken || ''}
-                      onChange={(event) => setApiConfigState({ ...apiConfig, accessToken: event.target.value.trim() })}
+                      onChange={(event) => {
+                        const val = event.target.value.trim();
+                        if (val.includes('•') || val.includes('●') || val.includes('***')) {
+                          setLoginError('⚠ Bạn vừa dán ký tự bị ẩn (chấm đen ••• hoặc sao ***). Vui lòng vào omnivi.ai/vi/account (mục API), bấm nút Sao chép (📋) để copy đúng mã API Key.');
+                        } else {
+                          setLoginError('');
+                        }
+                        setApiConfigState({ ...apiConfig, accessToken: val });
+                      }}
                       required
                     />
                     <div style={{ fontSize: 12, color: 'var(--muted, #bbb)', marginTop: 6 }}>
-                      Lấy API Key: Đăng nhập tại <a href="https://omnivi.ai/vi/account" target="_blank" rel="noopener noreferrer" style={{ color: '#58a6ff' }}>omnivi.ai/vi/account</a> &gt; Mở mục <strong>API</strong> &gt; Sao chép API Key và dán vào đây.
+                      Lấy API Key: Đăng nhập tại <a href="https://omnivi.ai/vi/account" target="_blank" rel="noopener noreferrer" style={{ color: '#58a6ff' }}>omnivi.ai/vi/account</a> &gt; Mở mục <strong>API</strong> &gt; Bấm nút <strong>Sao chép (📋)</strong> để lấy mã thật (không bôi đen copy dấu chấm tròn).
                     </div>
                   </div>
 
